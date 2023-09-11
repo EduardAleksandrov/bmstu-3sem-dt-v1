@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 
 bool failCin();
 float functionY(float);
@@ -75,16 +76,29 @@ int main(void)
                 while(xnew<xmax)
                 {
                     x = xnew;
-                    // f = x*x;
-                    f = functionY(x);
-                    std::cout << f << ", для x = " << x << std::endl;
+                    try
+                    {
+                        f = functionY(x);
+                        std::cout << f << ", для x = " << x << std::endl;
+                    }
+                    catch(...)
+                    {
+                        std::cout << "---, деление на ноль" << std::endl;
+                    }
                     xnew+= h;
                 }
                 if(xnew>=xmax)
                 {
                     x = xmax;
-                    f = functionY(x);
-                    std::cout << f << ", для x = " << x << std::endl;
+                    try
+                    {
+                        f = functionY(x);
+                        std::cout << f << ", для x = " << x << std::endl;
+                    }
+                    catch(...)
+                    {
+                        std::cout << "---, деление на ноль" << std::endl;
+                    }
                 }
                 
             }
@@ -129,12 +143,55 @@ int main(void)
                     std::cout << "(Метод правых прямоугольников): Площадь равна: "<< f2 << std::endl;
                     std::cout << "(Метод трапеций): Площадь равна: "<< f3 << std::endl;
                 }
+            }
 
+            if(choise == 3)
+            {
+                float x, f, fprev;
+                f = 0;
+                fprev = 0;
+                bool counter = 1;
+                float eps = 0.01;            //min 0 max 3 step 0.3 0.2 0.1 eps 0.1 0.01
+                int nmax = 0;
+
+                while(true)
+                {
+                    nmax += 1;
+                    if(counter == 0 || nmax > 50) break;
+                    
+                    f = 0;
+                    float xnew = xmin;
+                    if(h > 0)
+                    {
+                        while(xnew<xmax)
+                        {
+                            x = xnew;
+                            f += ((x + h) - x)*functionY(x);
+                            xnew += h;
+                        }
+                        if(xnew>=xmax)
+                        {
+                            f += (xmax - x)*functionY(x);
+                        }
+                    } else {
+                        break;
+                    }
+                    
+                    if(fabs(f - fprev) >= eps && h > 0) 
+                    {
+                        counter = 1;
+                        h-= 0.01;
+                    } else {
+                        counter = 0;
+                    }
+
+                    float dif = fabs(f - fprev);
+                    std::cout << "Шаг: "<< nmax << " f=" << f << " fprev=" << fprev << " fdif=" << dif << std::endl;
+                    fprev = f;
+                }
+                std::cout << "Площадь равна: "<< f << std::endl;
             }
         }
-        
-
-
     }
     return 0;
 }
@@ -155,6 +212,7 @@ float functionY(float x)
 {
     float y;
     y = 0;
-    y = x*x;
-    return y;
+    // if(x)
+        return y = x*x;
+    throw "division by zero";
 }
