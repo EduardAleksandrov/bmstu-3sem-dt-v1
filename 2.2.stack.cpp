@@ -1,6 +1,5 @@
 #include <iostream>
 #include <new>
-#include <stdlib.h>
 
 
 #define STACKSIZE 5
@@ -16,10 +15,8 @@ int main(void)
 
     try
     {
-        // int *stack = new int[STACKSIZE] {0,0,0,0,0};
-        // int *stack = (int *) calloc(STACKSIZE, sizeof(int));
-
-        int stack[STACKSIZE];
+        stack = new int[STACKSIZE];
+        // int stack[STACKSIZE];
     }
     catch(const std::bad_alloc& e)
     {
@@ -36,6 +33,7 @@ int main(void)
         std::cout << "2.убрать значение из стека" << std::endl;
         std::cout << "3.печатать стек" << std::endl;
         std::cin >> chooseNumber;
+        
         if(chooseNumber == 1)
         {
             std::cout << "Введите значение" << std::endl;
@@ -49,9 +47,7 @@ int main(void)
             upperElement = popStack(check, stackBase, &stackPointer);
             if(check == 1) continue;
             std::cout << "Верхний элемент получен: " << upperElement << std::endl;
-
         }
-
         if(chooseNumber == 3)
         {
             int stackNum = stackPointer - stackBase;
