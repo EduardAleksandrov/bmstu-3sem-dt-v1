@@ -127,8 +127,8 @@ void printQueue(int *fpos, int *lpos, int *startPos, int *endPosition)
 void addElementToQueue(int *fpos, int **lpos, int *startPos, int *endPosition, int value)
 {
     std::cin >> value;
-    // записываем если очередь не полна и текущий элемент нулевой(пусто)
-    if((**lpos == 0) && (!(*lpos+1 == fpos) || !((*lpos == endPosition) && (startPos == fpos)))) **lpos = value;
+
+    if(**lpos == 0) **lpos = value;
 
     if((*lpos == endPosition) && (startPos != fpos))
     {
