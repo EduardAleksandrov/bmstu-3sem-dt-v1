@@ -82,7 +82,7 @@ int main(void)
 
 void fullnessQueue(int *fpos, int *lpos, int *startPos, int *endPosition)
 {
-    if(lpos == endPosition && (startPos == fpos))
+    if((lpos == endPosition) && (startPos == fpos))
     {
         std::cout << "Очередь полна" << std::endl;
     } else if(lpos+1 == fpos)
@@ -127,11 +127,13 @@ void printQueue(int *fpos, int *lpos, int *startPos, int *endPosition)
 void addElementToQueue(int *fpos, int **lpos, int *startPos, int *endPosition, int value)
 {
     std::cin >> value;
-    if(**lpos == 0) **lpos = value;
-    if(*lpos == endPosition && (startPos != fpos))
+    // записываем если очередь не полна и текущий элемент нулевой(пусто)
+    if((**lpos == 0) && (!(*lpos+1 == fpos) || !((*lpos == endPosition) && (startPos == fpos)))) **lpos = value;
+
+    if((*lpos == endPosition) && (startPos != fpos))
     {
         *lpos = startPos;
-    } else if(*lpos == endPosition && (startPos == fpos))
+    } else if((*lpos == endPosition) && (startPos == fpos))
     {
         std::cout << "Очередь полна" << std::endl;
         return;
@@ -154,10 +156,10 @@ int deleteElementFromQueue(int **fpos, int **lpos, int *startPos, int *endPositi
     int dropedElement = **fpos;
     **fpos = 0;
 
-    if(*lpos == endPosition && (startPos == *fpos))
+    if((*lpos == endPosition) && (startPos == *fpos))
     {
         *lpos = startPos;
-    } else if((*lpos+1 == *fpos) && (**lpos != 0))
+    } else if((*lpos+1 == *fpos) && (**lpos != 0)) // lpos != 0 указатель не проедет дальше при следующем удалении, останется на месте
     {
         (*lpos)++;
     }
