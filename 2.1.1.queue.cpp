@@ -12,12 +12,12 @@ void emptynessQueue(int*, int*);
 void firstElementQueue(int*, int*);
 void printQueue(int*, int*, int*, int*);
 void addElementToQueue(int*, int**, int*, int*, int);
-void deleteElementFromQueue(int**, int**, int*, int*);
+int deleteElementFromQueue(int**, int**, int*, int*);
 
 int main(void)
 {
     int *fpos, *lpos, *startPos, *endPosition;
-    int value, chooseNumber;
+    int value, chooseNumber, dropedValue;
 
     try
     {
@@ -65,7 +65,8 @@ int main(void)
         }
         if(chooseNumber == 4)
         {
-            deleteElementFromQueue(&fpos, &lpos, startPos, endPosition);
+            dropedValue = deleteElementFromQueue(&fpos, &lpos, startPos, endPosition);
+            // std::cout << dropedValue << std::endl;
         }
         if(chooseNumber == 5)
         {
@@ -143,14 +144,14 @@ void addElementToQueue(int *fpos, int **lpos, int *startPos, int *endPosition, i
     }
 }
 
-void deleteElementFromQueue(int **fpos, int **lpos, int *startPos, int *endPosition)
+int deleteElementFromQueue(int **fpos, int **lpos, int *startPos, int *endPosition)
 {
     if(*lpos == *fpos)
     {
         std::cout << "Очередь пуста" << std::endl;
-        return;
+        return 0;
     }
-    
+    int dropedElement = **fpos;
     **fpos = 0;
 
     if(*lpos == endPosition && (startPos == *fpos))
@@ -167,6 +168,7 @@ void deleteElementFromQueue(int **fpos, int **lpos, int *startPos, int *endPosit
     } else {
         (*fpos)++;
     }
+    return dropedElement;
 }
 
 
