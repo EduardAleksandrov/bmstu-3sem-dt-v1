@@ -5,6 +5,8 @@ run1.integral:
 
 run2.1.queue:
 	g++ -std=c++17 ./2.1.queue.cpp -o ./build/2.1.queue -g && ./build/2.1.queue
+run2.1.1.queue:
+	g++ -std=c++17 ./2.1.1.queue.cpp -o ./build/2.1.1.queue -g && ./build/2.1.1.queue
 	
 
 run2.2.stack:

@@ -1,5 +1,8 @@
+// циклическая очередь - работает
 #include <iostream>
 #include <new>
+
+// fpos----lpos--
 
 #define QUEUESIZE 5
 
@@ -22,7 +25,7 @@ int main(void)
     lpos = startPos;
 
     for(int i = 0; i< endPosition-startPos+1; i++)
-        *(startPos+i) = 1;
+        *(startPos+i) = 0;
 
     for(;;)
     {
@@ -42,58 +45,136 @@ int main(void)
         }
         if(chooseNumber == 1)
         {
-
+            if(lpos == endPosition && (startPos == fpos))
+            {
+                std::cout << "Очередь полна" << std::endl;
+            } else if(lpos+1 == fpos)
+            {
+                std::cout << "Очередь полна" << std::endl;
+            } else {
+                std::cout << "Очередь не полна" << std::endl;
+            }
         }
         if(chooseNumber == 2)
         {
-
+            if(lpos == fpos)
+            {
+                std::cout << "Очередь пуста" << std::endl;
+            } else {
+                std::cout << "Очередь не пуста" << std::endl;
+            }
         }
         if(chooseNumber == 3)
         {
-            
+            int x = fpos - startPos;
+            std::cout << "Первый элемент в очереди: " << *fpos << ", индекс=" << x << std::endl;
         }
         if(chooseNumber == 4)
         {
-            fpos = endPosition;
-            *fpos = 6;
+            if(lpos == fpos)
+            {
+                std::cout << "Очередь пуста" << std::endl;
+                continue;
+            }
+            
+            *fpos = 0;
+
+            if(lpos == endPosition && (startPos == fpos))
+            {
+                lpos = startPos;
+            } else if((lpos+1 == fpos) && (*lpos != 0))
+            {
+                lpos++;
+            }
+
+            if(endPosition == fpos)
+            {
+                fpos = startPos;
+            } else {
+                fpos++;
+            }
         }
         if(chooseNumber == 5)
         {
-            std::cin >> value;
-            *lpos = value;
-            lpos++;
             
+            // if(lpos+1 == fpos)
+            // {
+            //     std::cout << "Очередь полна" << std::endl;
+            //     continue;
+            // }
+            // if(lpos == endPosition)
+            // {
+            //     if(startPos == fpos)
+            //     {
+            //         std::cout << "Очередь полна" << std::endl;
+            //         continue;
+            //     }
+            // }
+
+
+
+            std::cin >> value;
+            // *lpos = value;
+            if(*lpos == 0) *lpos = value;
+            if(lpos == endPosition && (startPos != fpos))
+            {
+                lpos = startPos;
+            } else if(lpos == endPosition && (startPos == fpos))
+            {
+                std::cout << "Очередь полна" << std::endl;
+                continue;
+            } else if(lpos+1 == fpos)
+            {
+                std::cout << "Очередь полна" << std::endl;
+                continue;
+            } else {
+                lpos++;
+            }
         }
         if(chooseNumber == 6)
         {
-            int x = fpos - startPos;
-            std::cout << x;
-            int y = lpos - startPos;
-            std::cout << y;
+            // int x = fpos - startPos;
+            // std::cout << x;
+            // int y = lpos - startPos;
+            // std::cout << y << endPosition-startPos+1;
 
+            // if(y == endPosition-startPos) y++;
+            // for(int i = 0; i<endPosition-startPos+1; i++)
+            //     {
+                    
+                    
+            //         if(fpos>lpos && i>y &&i<x && y++<x)
+            //         {
+            //             std::cout << 0 << " ";
+            //         } else if(fpos>lpos){
+            //             std::cout << *(startPos+i) << " ";
+            //         }
+
+            //         if(fpos<lpos && y>i){
+            //             std::cout << *(startPos+i) << " ";
+            //         // } else if(fpos<lpos)
+            //         // {
+            //         //     std::cout << *(startPos+i) << " ";
+            //         } else if(fpos<lpos){
+            //             std::cout << 0 << " ";
+            //         }
+                    
+            //         if(fpos == lpos)
+            //         {
+            //             std::cout << 0 << " ";
+            //         }
+            //     }
+            // std::cout << std::endl;
 
             for(int i = 0; i<endPosition-startPos+1; i++)
-                {
-                    
-                    
-                    if(fpos>lpos && i>y &&i<x && y++<x)
-                    {
-                        std::cout << 0 << " ";
-                    } else if(fpos>lpos){
-                        std::cout << *(startPos+i) << " ";
-                    }
-
-                    if(fpos<lpos && y>i){
-                        std::cout << *(startPos+i) << " ";
-                    } else if(fpos<lpos){
-                        std::cout << 0 << " ";
-                    }
-                    
-                    if(fpos == lpos)
-                    {
-                        std::cout << 0 << " ";
-                    }
-                }
+            {
+                std::cout << *(startPos+i) << " ";
+            }
+            std::cout << std::endl;
+            int x = fpos - startPos;
+            int y = lpos - startPos;
+            std::cout << "fpos=" << *fpos << ", индекс=" << x << std::endl;
+            std::cout << "lpos=" << *lpos << ", индекс=" << y << std::endl;
             std::cout << std::endl;
         }
     }
