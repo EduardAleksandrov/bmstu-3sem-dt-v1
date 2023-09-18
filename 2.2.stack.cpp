@@ -6,6 +6,7 @@
 
 int pushStack(int, int*, int**);
 int popStack(int&, int*, int**);
+void printStack(int*, int*, int*);
 
 
 int main(void)
@@ -50,11 +51,7 @@ int main(void)
         }
         if(chooseNumber == 3)
         {
-            int stackNum = stackPointer - stackBase;
-            // std::cout << stackNum << std::endl;
-            for(int i = 0; i < stackNum; i++)
-                std::cout << stack[i] << " ";
-            std::cout << std::endl;
+            printStack(stack, stackBase, stackPointer);
         }
     }
     return 0;
@@ -84,4 +81,19 @@ int popStack(int &check, int *stackBase, int **stackPointer)
     (*stackPointer)--;
     return **stackPointer;
 }
+
+void printStack(int *stack, int *stackBase, int *stackPointer)
+{
+    int stackNum = stackPointer - stackBase;
+    // std::cout << stackNum << std::endl;
+    if (stackNum == 0)
+    {
+        std::cout << "Стек пуст" << std::endl;
+        return;
+    } 
+    for(int i = 0; i < stackNum; i++)
+        std::cout << stack[i] << " ";
+    std::cout << std::endl;
+}
+
 
