@@ -8,7 +8,7 @@ int main(void)
 {
     float xmin;
     float xmax;
-    float h, hConst;
+    double h, hConst;
     bool failEnter = 0;
     for(;;)
     {
@@ -94,7 +94,7 @@ int main(void)
                     }
                     catch(...)
                     {
-                        std::cout << "---, деление на ноль" << std::endl;
+                        std::cout << "---, деление на ноль для x = " << x << std::endl;
                     }
                     xnew+= h;
                 }
@@ -108,7 +108,7 @@ int main(void)
                     }
                     catch(...)
                     {
-                        std::cout << "---, деление на ноль" << std::endl;
+                        std::cout << "---, деление на ноль для x = "<< x << std::endl;
                     }
                 }
                 
@@ -176,9 +176,9 @@ int main(void)
                 for(;;)
                 {
                     std::cout << "Выберете метод расчета" << std::endl;
-                    std::cout << "1.(Метод левых прямоугольников): Площадь равна: "<< std::endl;
-                    std::cout << "2.(Метод правых прямоугольников): Площадь равна: "<<  std::endl;
-                    std::cout << "3.(Метод трапеций): Площадь равна: "<<  std::endl;
+                    std::cout << "1.(Метод левых прямоугольников): "<< std::endl;
+                    std::cout << "2.(Метод правых прямоугольников): "<<  std::endl;
+                    std::cout << "3.(Метод трапеций): "<<  std::endl;
                     std::cin >> method;
                     if(std::cin.fail())
                     {
@@ -201,12 +201,12 @@ int main(void)
                 while(true)
                 {
                     nmax += 1;
-                    if(counter == 0 || nmax > 500) break;
+                    if(counter == 0 || nmax > 500 || h<=0) break;
                     f = 0;
-                    float xnew = xmin;
+                    double xnew = xmin;
                     
-                    if(h > 0)
-                    {
+                    // if(h > 0)
+                    // {
                         while(xnew<xmax)
                         {
                             x = xnew;
@@ -220,6 +220,7 @@ int main(void)
                             if(method == 3) f += (functionY(x) + functionY(x + h))/2*((x + h) - x);
 
                             xnew += h;
+                            // std::cout << "зациклило " << h << std::endl;
                         }
                         if(xnew>=xmax)
                         {
@@ -227,12 +228,12 @@ int main(void)
                             if(method == 2) f += (xmax - x)*functionY(xmax);
                             if(method == 3) f += (functionY(x) + functionY(xmax))/2*(xmax - x);
                         }
-                    } else {
-                        break;
-                    }
+                    // } else {
+                    //     break;
+                    // }
 
                     float dif = fabs(f - fprev);
-                    if(dif > eps) 
+                    if(dif >= eps) 
                     {
                         counter = 1;
                         h-= 0.01;
@@ -240,10 +241,11 @@ int main(void)
                         counter = 0;
                     }
 
+                    if(h <= 0) std::cout << "Величина шага обнулилась" << std::endl;
                     std::cout << "Шаг: "<< nmax << " f=" << f << " fprev=" << fprev << " fdif=" << dif << std::endl;
                     fprev = f;
                 }
-                std::cout << "Площадь равна: "<< f << std::endl;
+                std::cout << "Площадь равна: "<< f << std::endl << std::endl;
             }
         }
     }
