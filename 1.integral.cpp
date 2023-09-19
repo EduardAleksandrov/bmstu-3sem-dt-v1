@@ -8,7 +8,7 @@ int main(void)
 {
     float xmin;
     float xmax;
-    float h;
+    float h, hConst;
     bool failEnter = 0;
     for(;;)
     {
@@ -35,12 +35,22 @@ int main(void)
                 failEnter = 0;
                 continue;
             }
+            if (xmax<=xmin)
+            {
+                std::cout << "Неверное значение, повторите" << std::endl; 
+                continue;
+            }
             break;
         }
         for(;;) 
         {
             std::cout << "Введите шаг h: ";
-            std::cin >> h;
+            std::cin >> hConst;
+            if (hConst <= 0 || hConst > xmax-xmin)
+            {
+                std::cout << "Неверное значение, повторите" << std::endl; 
+                continue;
+            }
             failEnter = failCin();
             if(failEnter == 1)
             {
@@ -49,7 +59,7 @@ int main(void)
             }
             break;
         }
-        std::cout << "xmin: " << xmin << ", xmax: " << xmax << ", step h:" << h << std::endl;
+        std::cout << "xmin: " << xmin << ", xmax: " << xmax << ", step h:" << hConst << std::endl;
 
         short int choise;
         for(;;)
@@ -62,7 +72,7 @@ int main(void)
             if(std::cin.fail())
             {
                 std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // очистка cin от всего лишнего
+                // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // очистка cin от всего лишнего
                 std::cout << "Неверный ввод, повторите."<< std::endl;
                 continue;
             }
@@ -73,6 +83,7 @@ int main(void)
                 float x, f; //определили функцию
                 f = 0;
                 float xnew = xmin;
+                h = hConst;
                 while(xnew<xmax)
                 {
                     x = xnew;
@@ -105,30 +116,21 @@ int main(void)
 
             if(choise == 2)
             {
-                // float eps;
-                // for(;;)
-                // {
-                //     std::cout << "Введите точность eps" << std::endl;
-                //     std::cin >> eps;
-                //     if(std::cin.fail())
-                //     {
-                //         std::cin.clear();
-                //         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // очистка cin от всего лишнего
-                //         std::cout << "Неверный ввод, повторите."<< std::endl;
-                //         continue;
-                //     }
-                //     break;
-                // }
-                    
-
                 float x, f1, f2, f3;
                 f1 = 0;
                 f2 = 0;
                 f3 = 0;
                 float xnew = xmin;
+                h = hConst;
                 while(xnew<xmax)
                 {
                     x = xnew;
+                    if (xmax - xmin == h || xnew + h >= xmax)
+                    {
+                        xnew+= h;
+                        break;
+                    }
+                    
                     f1+=((x + h) - x)*functionY(x);
                     f2+=((x + h) - x)*functionY(x + h);
                     f3+=(functionY(x) + functionY(x + h))/2*((x + h) - x);
@@ -151,33 +153,86 @@ int main(void)
                 f = 0;
                 fprev = 0;
                 bool counter = 1;
-                float eps = 0.01;            //min 0 max 3 step 0.3 0.2 0.1 eps 0.1 0.01
+                float eps;            //min 0 max 3 step 0.3 0.2 0.1 eps 0.1 0.01
+                for(;;)
+                {
+                    std::cout << "Введите eps(точность) от 0 до 1" << std::endl;
+                    std::cin >> eps;
+                    if(std::cin.fail())
+                    {
+                        std::cin.clear();
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // очистка cin от всего лишнего
+                        std::cout << "Неверный ввод, повторите."<< std::endl;
+                        continue;
+                    }
+                    if(eps>0 && eps<=1)
+                    {
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+                int method;
+                for(;;)
+                {
+                    std::cout << "Выберете метод расчета" << std::endl;
+                    std::cout << "1.(Метод левых прямоугольников): Площадь равна: "<< std::endl;
+                    std::cout << "2.(Метод правых прямоугольников): Площадь равна: "<<  std::endl;
+                    std::cout << "3.(Метод трапеций): Площадь равна: "<<  std::endl;
+                    std::cin >> method;
+                    if(std::cin.fail())
+                    {
+                        std::cin.clear();
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // очистка cin от всего лишнего
+                        std::cout << "Неверный ввод, повторите."<< std::endl;
+                        continue;
+                    }
+                    if(method>=1 && method<=3)
+                    {
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+                
                 int nmax = 0;
+                h = hConst; 
 
                 while(true)
                 {
                     nmax += 1;
-                    if(counter == 0 || nmax > 50) break;
-                    
+                    if(counter == 0 || nmax > 500) break;
                     f = 0;
                     float xnew = xmin;
+                    
                     if(h > 0)
                     {
                         while(xnew<xmax)
                         {
                             x = xnew;
-                            f += ((x + h) - x)*functionY(x);
+                            if (xmax - xmin == h || xnew + h >= xmax)
+                            {
+                                xnew+= h;
+                                break;
+                            }
+                            if(method == 1) f += ((x + h) - x)*functionY(x);
+                            if(method == 2) f += ((x + h) - x)*functionY(x + h);
+                            if(method == 3) f += (functionY(x) + functionY(x + h))/2*((x + h) - x);
+
                             xnew += h;
                         }
                         if(xnew>=xmax)
                         {
-                            f += (xmax - x)*functionY(x);
+                            if(method == 1) f += (xmax - x)*functionY(x);
+                            if(method == 2) f += (xmax - x)*functionY(xmax);
+                            if(method == 3) f += (functionY(x) + functionY(xmax))/2*(xmax - x);
                         }
                     } else {
                         break;
                     }
-                    
-                    if(fabs(f - fprev) >= eps && h > 0) 
+
+                    float dif = fabs(f - fprev);
+                    if(dif > eps) 
                     {
                         counter = 1;
                         h-= 0.01;
@@ -185,7 +240,6 @@ int main(void)
                         counter = 0;
                     }
 
-                    float dif = fabs(f - fprev);
                     std::cout << "Шаг: "<< nmax << " f=" << f << " fprev=" << fprev << " fdif=" << dif << std::endl;
                     fprev = f;
                 }
