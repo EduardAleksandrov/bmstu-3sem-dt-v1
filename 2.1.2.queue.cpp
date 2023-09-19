@@ -1,5 +1,5 @@
 
-// циклическая очередь с функциями - работает но с нулем
+// циклическая очередь с функциями - полностью работает
 #include <iostream>
 #include <new>
 
@@ -13,6 +13,11 @@ void firstElementQueue(int*, int*);
 void printQueue(int*, int*, int*, int*);
 void addElementToQueue(int*, int**, int*, int*, int);
 int deleteElementFromQueue(int**, int**, int*, int*);
+
+
+int addLastElement = 0; //проверка, менялся ли последний элемент, 1-менялся, 0-не менялся
+int exclude = 0; //заменять последнее значения только один раз когда очередь не полна
+
 
 int main(void)
 {
@@ -82,10 +87,10 @@ int main(void)
 
 void fullnessQueue(int *fpos, int *lpos, int *startPos, int *endPosition)
 {
-    if((lpos == endPosition) && (startPos == fpos))
+    if((lpos == endPosition) && (startPos == fpos) && exclude == 1)
     {
         std::cout << "Очередь полна" << std::endl;
-    } else if(lpos+1 == fpos)
+    } else if(lpos+1 == fpos && addLastElement == 1)
     {
         std::cout << "Очередь полна" << std::endl;
     } else {
@@ -128,21 +133,37 @@ void addElementToQueue(int *fpos, int **lpos, int *startPos, int *endPosition, i
 {
     std::cin >> value;
 
-    if(**lpos == 0) **lpos = value;
+    // if(**lpos == 0) **lpos = value;
+    // static int exclude = 0; //заменять последнее значения только один раз когда очередь не полна
+    if((*lpos != endPosition) && (startPos != fpos)) exclude = 0;
+    if(*lpos+1 != fpos) addLastElement = 0;
 
     if((*lpos == endPosition) && (startPos != fpos))
     {
         *lpos = startPos;
+        *endPosition = value;
     } else if((*lpos == endPosition) && (startPos == fpos))
     {
+        if(exclude == 0) 
+        {
+            **lpos = value;
+            exclude = 1;
+        }
+            
         std::cout << "Очередь полна" << std::endl;
         return;
     } else if(*lpos+1 == fpos)
     {
+        if(addLastElement == 0)
+        {
+            **lpos = value;
+            addLastElement = 1;
+        }
         std::cout << "Очередь полна" << std::endl;
         return;
     } else {
         (*lpos)++;
+        *(*lpos - 1) = value;
     }
 }
 
@@ -156,12 +177,19 @@ int deleteElementFromQueue(int **fpos, int **lpos, int *startPos, int *endPositi
     int dropedElement = **fpos;
     **fpos = 0;
 
+    if(*lpos+1 != *fpos) addLastElement = 0;
+
     if((*lpos == endPosition) && (startPos == *fpos))
     {
         *lpos = startPos;
-    } else if((*lpos+1 == *fpos) && (**lpos != 0)) // lpos != 0 указатель не проедет дальше при следующем удалении, останется на месте
+    } else if((*lpos+1 == *fpos)) 
     {
-        (*lpos)++;
+        if(addLastElement == 1) // указатель не проедет дальше при следующем удалении, останется на месте
+        {
+            (*lpos)++;
+            addLastElement = 0;
+        }
+        
     }
 
     if(endPosition == *fpos)
