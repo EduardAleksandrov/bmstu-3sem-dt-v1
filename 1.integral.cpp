@@ -6,8 +6,8 @@ float functionY(float);
 
 int main(void)
 {
-    float xmin;
-    float xmax;
+    double xmin;
+    double xmax;
     double h, hConst;
     bool failEnter = 0;
     for(;;)
@@ -72,7 +72,7 @@ int main(void)
             if(std::cin.fail())
             {
                 std::cin.clear();
-                // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // очистка cin от всего лишнего
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // очистка cin от всего лишнего
                 std::cout << "Неверный ввод, повторите."<< std::endl;
                 continue;
             }
@@ -82,13 +82,14 @@ int main(void)
             {
                 float x, f; //определили функцию
                 f = 0;
-                float xnew = xmin;
+                double xnew = xmin;
                 h = hConst;
                 while(xnew<xmax)
                 {
                     x = xnew;
                     try
                     {
+                        // if(x < 0.00001 && x > -0.00001) x = 0;
                         f = functionY(x);
                         std::cout << f << ", для x = " << x << std::endl;
                     }
@@ -103,6 +104,7 @@ int main(void)
                     x = xmax;
                     try
                     {
+                        // if(x < 0.00001 && x > -0.00001) x = 0;
                         f = functionY(x);
                         std::cout << f << ", для x = " << x << std::endl;
                     }
@@ -120,7 +122,7 @@ int main(void)
                 f1 = 0;
                 f2 = 0;
                 f3 = 0;
-                float xnew = xmin;
+                double xnew = xmin;
                 h = hConst;
                 while(xnew<xmax)
                 {

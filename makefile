@@ -1,4 +1,8 @@
 
+run0.check:
+	g++ -std=c++17 ./0.check.cpp -o ./build/0.check -g && ./build/0.check
+
+
 run1.integral:
 	g++ -std=c++17 ./1.integral.cpp -o ./build/1.integral -g && ./build/1.integral
 	
