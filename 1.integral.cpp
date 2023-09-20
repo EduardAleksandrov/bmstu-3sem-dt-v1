@@ -153,7 +153,7 @@ int main(void)
             {
                 float x, f, fprev;
                 f = 0;
-                fprev = 0;
+                fprev = -1;
                 bool counter = 1;
                 float eps;            //min 0 max 3 step 0.3 0.2 0.1 eps 0.1 0.01
                 for(;;)
