@@ -82,6 +82,10 @@ int main(void)
             printQueue(fpos, lpos, startPos, endPosition);
         }
     }
+
+    delete [] startPos;
+    startPos = nullptr;
+
     return 0;
 }
 

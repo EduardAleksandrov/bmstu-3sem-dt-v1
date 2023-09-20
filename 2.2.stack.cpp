@@ -7,6 +7,9 @@
 int pushStack(int, int*, int**);
 int popStack(int&, int*, int**);
 void printStack(int*, int*, int*);
+void checkFullness(int*, int*);
+void checkEmptyness(int*, int*);
+void upperElement(int*, int*);
 
 
 int main(void)
@@ -16,7 +19,7 @@ int main(void)
 
     try
     {
-        stack = new int[STACKSIZE];
+        stack = new int[STACKSIZE + 1];
         // int stack[STACKSIZE];
     }
     catch(const std::bad_alloc& e)
@@ -33,6 +36,9 @@ int main(void)
         std::cout << "1.добавить значение в стек" << std::endl;
         std::cout << "2.убрать значение из стека" << std::endl;
         std::cout << "3.печатать стек" << std::endl;
+        std::cout << "4.проверить полноту стека" << std::endl;
+        std::cout << "5.проверить пустоту стека" << std::endl;
+        std::cout << "6.показать верхний элемент стека" << std::endl;
         std::cin >> chooseNumber;
         
         if(chooseNumber == 1)
@@ -53,7 +59,24 @@ int main(void)
         {
             printStack(stack, stackBase, stackPointer);
         }
+        if(chooseNumber == 4)
+        {
+            checkFullness(stackBase, stackPointer);
+        }
+        if(chooseNumber == 5)
+        {
+            checkEmptyness(stackBase, stackPointer);
+        }
+        if(chooseNumber == 6)
+        {
+            upperElement(stackBase, stackPointer);
+        }
+
     }
+
+    delete [] stack;
+    stack = nullptr;
+
     return 0;
 }
 
@@ -96,4 +119,33 @@ void printStack(int *stack, int *stackBase, int *stackPointer)
     std::cout << std::endl;
 }
 
+void checkFullness(int*stackBase, int*stackPointer)
+{
+    if(stackPointer == (stackBase + STACKSIZE))
+    {
+        std::cout << "Стек полон" << std::endl;
+    } else {
+        std::cout << "Стек не полон" << std::endl;
+    }
+}
+
+void checkEmptyness(int *stackBase, int *stackPointer)
+{
+    if(stackPointer == stackBase)
+    {
+        std::cout << "Стек пуст" << std::endl;
+    } else {
+        std::cout << "Стек не пуст" << std::endl;
+    }
+}
+
+void upperElement(int *stackBase, int *stackPointer)
+{
+    if(stackPointer == stackBase)
+    {
+        std::cout << "Стек пуст" << std::endl;
+        return;
+    }
+    std::cout << "Верхний элемент = " << *(stackPointer-1) << std::endl;
+}
 

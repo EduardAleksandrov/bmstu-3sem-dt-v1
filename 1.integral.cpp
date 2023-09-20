@@ -222,7 +222,6 @@ int main(void)
                             if(method == 3) f += (functionY(x) + functionY(x + h))/2*((x + h) - x);
 
                             xnew += h;
-                            // std::cout << "зациклило " << h << std::endl;
                         }
                         if(xnew>=xmax)
                         {
