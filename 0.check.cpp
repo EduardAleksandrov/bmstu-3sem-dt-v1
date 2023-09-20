@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 int main(void)
 {
@@ -6,7 +7,7 @@ int main(void)
     for(int i = 0; i < 12 ; i++)
     {
         x-=0.1;
-
+        x = round(x*10)/10;
         std::cout << x << " " << "\n";
     }
         

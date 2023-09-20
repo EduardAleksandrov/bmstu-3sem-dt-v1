@@ -46,7 +46,7 @@ int main(void)
         {
             std::cout << "Введите шаг h: ";
             std::cin >> hConst;
-            if (hConst <= 0 || hConst > xmax-xmin)
+            if (hConst <= 0 || hConst > xmax-xmin || hConst < 0.000999)
             {
                 std::cout << "Неверное значение, повторите" << std::endl; 
                 continue;
@@ -86,6 +86,7 @@ int main(void)
                 h = hConst;
                 while(xnew<xmax)
                 {
+                    xnew = round(xnew*10000)/10000; // округление для вывода нуля
                     x = xnew;
                     try
                     {
