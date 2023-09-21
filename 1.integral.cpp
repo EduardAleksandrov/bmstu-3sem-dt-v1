@@ -238,7 +238,23 @@ int main(void)
                     if(dif >= eps) 
                     {
                         counter = 1;
-                        h-= 0.01;
+                        if(hConst>=0.1)
+                        {
+                            h-= 0.01;
+                            // std::cout << "шаг 0.01"<< std::endl;
+                        } else if(hConst>=0.01)
+                        {
+                            h-= 0.001;
+                            // std::cout << "шаг 0.001"<< std::endl;
+                        } else if(hConst>=0.001)
+                        {
+                            h-= 0.0001;
+                            // std::cout << "шаг 0.0001"<< std::endl;
+                        } else if(hConst>=0.000999)
+                        {
+                            h-= 0.00001;
+                            // std::cout << "шаг 0.00001"<< std::endl;
+                        }
                     } else {
                         counter = 0;
                     }
