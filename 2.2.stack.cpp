@@ -92,7 +92,7 @@ int pushStack(int value, int *stackBase, int **stackPointer)
     return 0;
 }
 
-int popStack(int &check, int *stackBase, int **stackPointer)
+int popStack(int &check, int *stackBase, int **stackPointer) //bool push, pop, проверка верхнего элемента, а значение по переменной по ссылке в stack и очередь
 {
     if((*stackPointer) == stackBase)
     {
