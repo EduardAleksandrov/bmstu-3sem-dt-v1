@@ -17,3 +17,7 @@ run2.1.2.queue:
 run2.2.stack:
 	g++ -std=c++17 ./2.2.stack.cpp -o ./build/2.2.stack -g && ./build/2.2.stack
 	
+run3.1.opz:
+	g++ -std=c++17 ./3.1.opz.cpp -o ./build/3.1.opz -g && ./build/3.1.opz
+run3.1.1.opz:
+	g++ -std=c++17 ./3.1.1.opz.cpp -o ./build/3.1.1.opz -g && ./build/3.1.1.opz
