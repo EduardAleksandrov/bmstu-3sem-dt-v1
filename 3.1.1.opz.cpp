@@ -24,7 +24,7 @@ int main(void)
     std::vector<std::string> inputStringArray; //массив токенов
 
     // --- программные данные
-    std::string programExpression {"2^cot(5)*5/5*x+sin(x)-(-66+22-cos(4))+50-x"}; //программное выражение
+    std::string programExpression {"2^(cot(5)*5/5*x+sin(x)-(-66+22-cos(4))+50-x)"}; //программное выражение
     double xxmin {0};
     double xxmax {10};
     double hhConst {1};
@@ -169,6 +169,8 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
     std::array<std::string, 1> variableX {"x"};
     // varX = 0;
 
+    int openBrackets {0}, closeBrackets {0}; //подсчет кавычек
+
     std::string promezString {};
     bool signExist, checkUnar; // checkUnar - проверка sin, cos...; signExist - проверка символа на существование
     for(int i = 0; i < inputString.length(); i++)
@@ -228,6 +230,11 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
                     promezString = {};  
                 }
             inputStringArray.push_back(inputString.substr(i, 1));
+
+            //считаем кавычки
+            if(inputString.substr(i, 1) == brackets[0]) openBrackets++;
+            if(inputString.substr(i, 1) == brackets[1]) closeBrackets++;
+
             signExist = 1;
             checkUnar = 0;
             continue;
@@ -272,6 +279,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             return 1;
         }
     }
+    if(openBrackets != closeBrackets) return 1;
 return 0;
 }
 
