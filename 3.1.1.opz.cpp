@@ -24,7 +24,7 @@ int main(void)
     std::vector<std::string> inputStringArray; //массив токенов
 
     // --- программные данные
-    std::string programExpression {"2^cot(5)*5/5*sin(x)-(-66+22-cos(4))+50"}; //программное выражение
+    std::string programExpression {"2^cot(5)*5/5*x+sin(x)-(-66+22-cos(4))+50-x"}; //программное выражение
     double xxmin {0};
     double xxmax {10};
     double hhConst {1};
@@ -241,7 +241,20 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             signExist = 1;
             checkUnar = 0;
             promezString = {};
+            // проверка x предшествует числу
+            bool checkNextElement = 0;
+            for(int j = 0; j < binaryOperators.length(); j++)
+            {
+                if(inputString.substr(i+1, 1) == binaryOperators.substr(j, 1)) checkNextElement = 1;
+            }
+            if(inputString.substr(i+1, 1) == brackets[1]) checkNextElement = 1;
+            if(i == inputString.length()-1) checkNextElement = 1;
+            
+            if(checkNextElement != 1) return 1;
+
+            // x последний
             if(i == inputString.length()-1) break;
+
             continue;
         }
 
