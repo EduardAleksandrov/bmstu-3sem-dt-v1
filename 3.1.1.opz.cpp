@@ -9,7 +9,7 @@
 
 // проверка ввода
 bool failCin();
-// 1) перевод введенных данных во входную строку
+// 1) перевод введенных данных во входную строку(массив строк-токенов)
 bool getTokenStringArray(std::string, std::vector<std::string>&, bool&);
 
 int main(void)
@@ -17,20 +17,20 @@ int main(void)
 // Вводные данные
     std::string inputString {};
     // если в выражении есть x
-    double xmin = 0;
-    double xmax = 0;
-    double h, hConst = 0;
+    double xmin {0};
+    double xmax {0};
+    double h, hConst {0};
     
     std::vector<std::string> inputStringArray; //массив токенов
 
     // --- программные данные
-    std::string programExpression {"2^cot(5)*5/5*sin(9)-(-66+22-cos(x))"}; //программное выражение
-    double xxmin = 0;
-    double xxmax = 10;
-    double hhConst = 1;
+    std::string programExpression {"2^cot(5)*5/5*sin(x)-(-66+22-cos(4))+50"}; //программное выражение
+    double xxmin {0};
+    double xxmax {10};
+    double hhConst {1};
     // --- конец программных данных
 
-    bool varX = 0; // флаг, есть ли переменная x в выражении
+    bool varX = 0; // флаг, есть ли переменная x в выражении, 1-есть
     bool failEnter = 0; // флаг, ошибка ввода
     int choseInputExpression;
     for(;;)
@@ -105,7 +105,7 @@ int main(void)
                 break;
             } else {
                 std::cout << "Проверьте выражение на существование знака" << std::endl;
-                continue;;
+                continue;
             }
         }
         if(choseInputExpression == 2)
@@ -159,7 +159,7 @@ bool failCin()
 }
 
 
-// 1) перевод введенных данных во входную строку
+// 1) перевод введенных данных во входную строку(массив строк-токенов)
 bool getTokenStringArray(std::string inputString, std::vector<std::string> &inputStringArray, bool &varX)
 {
     std::string numbers {"0123456789"};
@@ -174,6 +174,8 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
     for(int i = 0; i < inputString.length(); i++)
     {
         signExist = 0;
+
+        if(inputString.substr(i, 1) == " ") continue;
         // накапливаем строки
         for(int j = 0; j < numbers.length(); j++)
         {
@@ -182,6 +184,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
                 promezString += inputString.substr(i, 1);
                 signExist = 1;
                 checkUnar = 0;
+                continue;
             }
         }
 
@@ -212,6 +215,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             promezString = {};
             signExist = 1;
             checkUnar = 1;
+            continue;
         }
 
         // вводим кавычки
@@ -226,6 +230,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             inputStringArray.push_back(inputString.substr(i, 1));
             signExist = 1;
             checkUnar = 0;
+            continue;
         }
 
         // вводим переменную
@@ -235,7 +240,9 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             varX = 1;
             signExist = 1;
             checkUnar = 0;
+            promezString = {};
             if(i == inputString.length()-1) break;
+            continue;
         }
 
         // если последний элемент число то вводим его
