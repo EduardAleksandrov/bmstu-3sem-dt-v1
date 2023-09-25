@@ -1,4 +1,5 @@
 // Токенизация вынесена в функцию
+// Добавлен ввод данных
 
 #include <iostream>
 #include <cmath>
@@ -6,30 +7,101 @@
 #include <vector>
 #include <array>
 
-// 1) перевод данных во входную строку
-bool getTokenStringArray(std::string, std::vector<std::string>&);
+// проверка ввода
+bool failCin();
+// 1) перевод введенных данных во входную строку
+bool getTokenStringArray(std::string, std::vector<std::string>&, bool&);
 
 int main(void)
 {
 // Вводные данные
     std::string inputString {};
-    std::vector<std::string> inputStringArray; 
+    // если в выражении есть x
+    double xmin = 0;
+    double xmax = 0;
+    double h, hConst = 0;
+    
+    std::vector<std::string> inputStringArray; //массив токенов
 
-    std::string programExpression {"2^cot(5)*5/5+sin(9)-(-66+22-cos(6))*x"};
+    // --- программные данные
+    std::string programExpression {"2^cot(5)*5/5*sin(9)-(-66+22-cos(x))"}; //программное выражение
+    double xxmin = 0;
+    double xxmax = 10;
+    double hhConst = 1;
+    // --- конец программных данных
 
+    bool varX = 0; // флаг, есть ли переменная x в выражении
+    bool failEnter = 0; // флаг, ошибка ввода
     int choseInputExpression;
     for(;;)
     {
         std::cout << "1.Ввести выражение" << std::endl;
         std::cout << "2.Использовать программное" << std::endl;
         std::cin >> choseInputExpression;
+        failEnter = failCin();
+        if(failEnter == 1)
+        {
+            failEnter = 0;
+            continue;
+        }
+        // break;
 
         if(choseInputExpression == 1)
         {
             std::cout << "Введите:" << std::endl;
             std::cin >> inputString;
-            if(!getTokenStringArray(inputString, inputStringArray))
+            if(!getTokenStringArray(inputString, inputStringArray, varX))
             {
+                if(varX)
+                {
+                    for(;;)
+                    {
+                        std::cout << "Введите x min: ";
+                        std::cin >> xmin;
+                        failEnter = failCin();
+                        if(failEnter == 1)
+                        {
+                            failEnter = 0;
+                            continue;
+                        }
+                        break;
+                    }
+                        
+                    for(;;)
+                    {
+                        std::cout << "Введите x max: ";
+                        std::cin >> xmax;
+                        failEnter = failCin();
+                        if(failEnter == 1)
+                        {
+                            failEnter = 0;
+                            continue;
+                        }
+                        if (xmax<=xmin)
+                        {
+                            std::cout << "Неверное значение, повторите" << std::endl; 
+                            continue;
+                        }
+                        break;
+                    }
+                    for(;;) 
+                    {
+                        std::cout << "Введите шаг h: ";
+                        std::cin >> hConst;
+                        if (hConst <= 0 || hConst > xmax-xmin || hConst < 0.000999)
+                        {
+                            std::cout << "Неверное значение, повторите" << std::endl; 
+                            continue;
+                        }
+                        failEnter = failCin();
+                        if(failEnter == 1)
+                        {
+                            failEnter = 0;
+                            continue;
+                        }
+                        break;
+                    }
+                }
                 break;
             } else {
                 std::cout << "Проверьте выражение на существование знака" << std::endl;
@@ -39,25 +111,30 @@ int main(void)
         if(choseInputExpression == 2)
         {
             inputString = programExpression;
-            if(!getTokenStringArray(inputString, inputStringArray))
+            if(!getTokenStringArray(inputString, inputStringArray, varX))
             {
+                if(varX)
+                {
+                    xmin = xxmin;
+                    xmax = xxmax;
+                    hConst = hhConst;
+                }
                 break;
             } else {
                 std::cout << "Проверьте выражение на существование знака" << std::endl;
-                break;
+                continue;
             }
         }
     }
 
-
-
-
-
+// --- печать токенизированного массива
+    std::cout << "Токенизированная строка: ";
     for(std::string n : inputStringArray)
         std::cout << n << "";
     std::cout << "\n";
 
-
+    std::cout << "xmin:"<< xmin << " xmax:" << xmax << " h:" << hConst << "\n";
+// --- конец печати
 
 
 
@@ -65,17 +142,35 @@ int main(void)
 
     return 0;
 }
-// 1) перевод данных во входную строку
-bool getTokenStringArray(std::string inputString, std::vector<std::string> &inputStringArray)
+
+
+
+// проверка ввода
+bool failCin()
+{
+    if(std::cin.fail())
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // очистка cin от всего лишнего
+        std::cout << "Неверный ввод, повторите."<< std::endl;
+        return 1;
+    }
+    return 0;
+}
+
+
+// 1) перевод введенных данных во входную строку
+bool getTokenStringArray(std::string inputString, std::vector<std::string> &inputStringArray, bool &varX)
 {
     std::string numbers {"0123456789"};
     std::string binaryOperators {"+-*/^"};
     std::array<std::string, 2>  brackets {"(",")"};
     std::array<std::string, 4> unaryOperators {"sin", "cos", "tan", "cot"};
     std::array<std::string, 1> variableX {"x"};
+    // varX = 0;
 
     std::string promezString {};
-    bool signExist, checkUnar;
+    bool signExist, checkUnar; // checkUnar - проверка sin, cos...; signExist - проверка символа на существование
     for(int i = 0; i < inputString.length(); i++)
     {
         signExist = 0;
@@ -84,7 +179,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
         {
             if(inputString.substr(i, 1) == numbers.substr(j, 1))
             {
-                promezString+=inputString.substr(i, 1);
+                promezString += inputString.substr(i, 1);
                 signExist = 1;
                 checkUnar = 0;
             }
@@ -137,7 +232,9 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
         if(inputString.substr(i, 1) == variableX[0])
         {
             inputStringArray.push_back(inputString.substr(i, 1));
+            varX = 1;
             signExist = 1;
+            checkUnar = 0;
             if(i == inputString.length()-1) break;
         }
 
@@ -157,3 +254,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
     }
 return 0;
 }
+
+
+
+
