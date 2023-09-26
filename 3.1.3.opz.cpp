@@ -46,8 +46,9 @@ int main(void)
     std::vector<std::string> inputStringArray; //массив токенов, входная строка
 
     // --- программные данные
-    std::string programExpression {"(2^2)*sin(4)"}; //программное выражение
+    std::string programExpression {"2^(cot(5)*5/5*x+sin(x)-(-66+22-cos(4))+50-x)"}; //программное выражение
     // {"2^(cot(5)*5/5*x+sin(x)-(-66+22-cos(4))+50-x)"}
+    // "(2^2)*sin(4)"
     double xxmin {0};
     double xxmax {10};
     double hhConst {1};
@@ -296,6 +297,30 @@ bool opz(std::string *stackString,
                 break;
             }
             // 3.a
+            if(inputStringArray[i] == brackets[1])
+            {
+                for(;;)
+                {
+                    std::string upperEl {};
+                    checkStack = upperElement(upperEl, stackBaseString, stackPointerString);
+                    if(upperEl != brackets[0])
+                    {
+                        std::string outputStack {};
+                        checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
+                        if(checkStack == 1) 
+                        {
+                            std::cout << "Стек пуст, ошибка разбора" << std::endl;
+                            exit(1);
+                        }
+                        outputStringArray.push_back(outputStack);
+                    } else {
+                        std::string outputStack {};
+                        checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
+                        if(checkStack == 1) std::cout << "Стек пуст" << std::endl;
+                        break;
+                    }
+                }
+            }
             // 3.1
             for(int j = 0; j < 9; j++)
             {
