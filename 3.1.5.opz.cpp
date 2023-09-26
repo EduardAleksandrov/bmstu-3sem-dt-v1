@@ -49,7 +49,7 @@ int main(void)
     std::vector<std::string> inputStringArray; //массив токенов, входная строка
 
     // --- программные данные
-    std::string programExpression {"2^(cot(5)*5/5*x+sin(x)-(66+22-cos(4))+50-x)"}; //программное выражение
+    std::string programExpression {"2^(cot(5)*5/5*x+sin(x)-(-66+22-cos(4))+50-x)"}; //программное выражение
     // {"2^(cot(5)*5/5*x+sin(x)-(-66+22-cos(4))+50-x)"}
     // "(2^2)*sin(4)"
     // 10+18*(1+7-8*2/(1/3)+1)+10
