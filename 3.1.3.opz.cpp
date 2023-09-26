@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <map>
 
 // проверка ввода
 bool failCin();
@@ -25,6 +26,13 @@ void printStack(T*, T*, T*);
 template<typename T>
 bool upperElement(T&, T*, T*);
 // Стек конец
+// ОПЗ - постфиксная запись
+bool opz(std::string *stackString, 
+        std::string *stackBaseString, 
+        std::string *stackPointerString, 
+        int stacksizeString, 
+        std::vector<std::string>,
+        std::vector<std::string>&);
 
 int main(void)
 {
@@ -35,7 +43,7 @@ int main(void)
     double xmax {0};
     double h, hConst {0};
     
-    std::vector<std::string> inputStringArray; //массив токенов
+    std::vector<std::string> inputStringArray; //массив токенов, входная строка
 
     // --- программные данные
     std::string programExpression {"(2^2)*sin(4)"}; //программное выражение
@@ -202,6 +210,19 @@ int main(void)
     // printStack(stackString, stackBaseString, stackPointerString);
 // --- варианты использования стека конец
 
+    // выходная строка ОПЗ
+    std::vector<std::string> outputStringArray; 
+
+    
+
+    /*
+        Перевод в ОПЗ
+        in - stack
+        in - inputStringArray
+        out - outputStringArray
+    */
+    opz(stackString, stackBaseString, stackPointerString, stacksizeString, inputStringArray, outputStringArray);
+
 
 
 
@@ -211,6 +232,146 @@ int main(void)
 
     return 0;
 }
+
+
+bool opz(std::string *stackString, 
+        std::string *stackBaseString, 
+        std::string *stackPointerString, 
+        int stacksizeString, 
+        std::vector<std::string> inputStringArray,
+        std::vector<std::string> &outputStringArray)
+{
+    // Приоритеты операций
+    std::map<std::string, int> priorityOperations;
+    // установка значений
+    priorityOperations["+"] = 1;
+    priorityOperations["-"] = 1;
+    priorityOperations["*"] = 2;
+    priorityOperations["/"] = 2;
+    priorityOperations["^"] = 3;
+    priorityOperations["sin"] = 4;
+    priorityOperations["cos"] = 4;
+    priorityOperations["tan"] = 4;
+    priorityOperations["cot"] = 4;
+    priorityOperations["("] = 5;
+
+    std::string numbers {"0123456789"};
+    std::string binaryOperators {"+-*/^"};
+    std::array<std::string, 2>  brackets {"(",")"};
+    std::array<std::string, 4> unaryOperators {"sin", "cos", "tan", "cot"};
+    std::array<std::string, 1> variableX {"x"};
+    std::array<std::string, 9> allOperators {"+","-","*","/","^","sin", "cos", "tan", "cot"};
+
+    outputStringArray = {};
+    stackPointerString = stackBaseString;
+
+    bool checkStack = 0;
+    bool continueThree = 0;
+    // 1
+    for(int i = 0; i < inputStringArray.size(); i++)
+    {
+        // 2
+        for(int j = 0; j < numbers.length(); j++)
+        {
+            if(inputStringArray[i].substr(0, 1) == numbers.substr(j, 1))
+            {
+                outputStringArray.push_back(inputStringArray[i]);
+                break;
+            }
+        }
+        // 2
+        if(inputStringArray[i] == variableX[0])
+        {
+            outputStringArray.push_back(inputStringArray[i]);
+            continue;
+        }
+        // 3
+        for(;;)
+        {
+            // 3.0
+            if(inputStringArray[i] == brackets[0])
+            {
+                checkStack = pushStack(inputStringArray[i], stackBaseString, &stackPointerString, stacksizeString);
+                if(checkStack == 1) std::cout << "Стек полон" << std::endl;
+                break;
+            }
+            // 3.a
+            // 3.1
+            for(int j = 0; j < 9; j++)
+            {
+                if(inputStringArray[i] == allOperators[j])
+                {
+                    // 3.1.a
+                    if(stackBaseString == stackPointerString)
+                    {
+                        checkStack = pushStack(inputStringArray[i], stackBaseString, &stackPointerString, stacksizeString);
+                        if(checkStack == 1) std::cout << "Стек полон" << std::endl;
+                        continueThree = 0;
+                        break;
+                    // 3.1.b
+                    } else {
+                        // 3.1.b.a
+                        std::string upperEl {};
+                        checkStack = upperElement(upperEl, stackBaseString, stackPointerString);
+                        if(checkStack == 1) std::cout << "Стек пуст" << std::endl;
+                        if(upperEl == brackets[0])
+                        {
+                            checkStack = pushStack(inputStringArray[i], stackBaseString, &stackPointerString, stacksizeString);
+                            if(checkStack == 1) std::cout << "Стек полон" << std::endl; 
+                            continueThree = 0;
+                            break;
+                        }
+                        // 3.1.b.b
+                        int priorityStack = 0;
+                        int priorityInput = 0;
+                        for (const auto& element : priorityOperations)
+                        {
+                            if(element.first == upperEl) priorityStack = element.second;
+                            if(element.first == inputStringArray[i]) priorityInput = element.second;
+                        }
+                        if(priorityStack < priorityInput)
+                        {
+                            checkStack = pushStack(inputStringArray[i], stackBaseString, &stackPointerString, stacksizeString);
+                            if(checkStack == 1) std::cout << "Стек полон" << std::endl;
+                            continueThree = 0;
+                            break;
+                        }
+                        std::string outputStack {};
+                        checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
+                        if(checkStack == 1) std::cout << "Стек пуст" << std::endl;
+                        outputStringArray.push_back(outputStack);
+                        continueThree = 1;
+                        break;
+                    }
+                }
+            }
+            if(continueThree == 1) continue;
+            break;
+        }
+    }
+    
+    for(int i = 0; i < stackPointerString-stackBaseString+1; i++)
+    {
+        std::string outputStack {};
+        checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
+        if(checkStack == 1) std::cout << "Стек пуст" << std::endl;
+        outputStringArray.push_back(outputStack);
+    }
+    
+    std::cout << "OPZ string: ";
+    for(std::string n : outputStringArray)
+        std::cout << n << " ";
+    std::cout << "\n";
+
+    printStack(stackString, stackBaseString, stackPointerString);
+
+
+    return 0;
+}
+
+
+
+
 
 
 

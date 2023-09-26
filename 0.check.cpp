@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cmath>
+void print();
+void printfun();
 
 int main(void)
 {
@@ -10,7 +12,17 @@ int main(void)
         x = round(x*10)/10;
         std::cout << x << " " << "\n";
     }
+    printfun();
         
     
     return 0;
+}
+void printfun()
+{
+    print();
+}
+
+void print()
+{
+    std::cout << "hello"<<"\n";
 }
