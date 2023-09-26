@@ -1,22 +1,24 @@
 // стек - работает
+// добавлены комментарии преподавателя
 #include <iostream>
 #include <new>
 
 
 #define STACKSIZE 5
 
-int pushStack(int, int*, int**);
-int popStack(int&, int*, int**);
+bool pushStack(int, int*, int**);
+bool popStack(int&, int*, int**);
 void printStack(int*, int*, int*);
 void checkFullness(int*, int*);
 void checkEmptyness(int*, int*);
-void upperElement(int*, int*);
+bool upperElement(int&, int*, int*);
 
 
 int main(void)
 {
     int *stackBase, *stackPointer, *stack;
-    int value, chooseNumber, check;
+    int value, chooseNumber;
+    bool check;
 
     try
     {
@@ -47,13 +49,21 @@ int main(void)
             std::cout << "Введите значение" << std::endl;
             std::cin >> value;
             check = pushStack(value, stackBase, &stackPointer);
-            if(check == 1) continue;
+            if(check == 1)
+            {
+                std::cout << "Стек полон" << std::endl;
+                continue;
+            }
         }
         if(chooseNumber == 2)
         {
             int upperElement;
-            upperElement = popStack(check, stackBase, &stackPointer);
-            if(check == 1) continue;
+            check = popStack(upperElement, stackBase, &stackPointer);
+            if(check == 1)
+            {
+                std::cout << "Стек пуст" << std::endl;
+                continue;
+            } 
             std::cout << "Верхний элемент получен: " << upperElement << std::endl;
         }
         if(chooseNumber == 3)
@@ -70,7 +80,14 @@ int main(void)
         }
         if(chooseNumber == 6)
         {
-            upperElement(stackBase, stackPointer);
+            int upperEl;
+            check = upperElement(upperEl, stackBase, stackPointer);
+            if(check == 1)
+            {
+                std::cout << "Стек пуст" << std::endl;
+                continue;
+            }
+            std::cout << "Верхний элемент = " << upperEl << std::endl;
         }
 
     }
@@ -81,11 +98,10 @@ int main(void)
     return 0;
 }
 
-int pushStack(int value, int *stackBase, int **stackPointer)
+bool pushStack(int value, int *stackBase, int **stackPointer)
 {
     if(*stackPointer == (stackBase + STACKSIZE))
     {
-        std::cout << "Стек полон" << std::endl;
         return 1;
     }
     **stackPointer = value;
@@ -93,23 +109,20 @@ int pushStack(int value, int *stackBase, int **stackPointer)
     return 0;
 }
 
-int popStack(int &check, int *stackBase, int **stackPointer) //bool push, pop, проверка верхнего элемента, а значение по переменной по ссылке в stack и очередь
+bool popStack(int &upperElement, int *stackBase, int **stackPointer) //bool push, pop, проверка верхнего элемента, а значение по переменной по ссылке в stack и очередь
 {
     if((*stackPointer) == stackBase)
     {
-        std::cout << "Стек пуст" << std::endl;
-        check = 1;
         return 1;
     }
-    check = 0;
     (*stackPointer)--;
-    return **stackPointer;
+    upperElement = **stackPointer;
+    return 0;
 }
 
 void printStack(int *stack, int *stackBase, int *stackPointer)
 {
     int stackNum = stackPointer - stackBase;
-    // std::cout << stackNum << std::endl;
     if (stackNum == 0)
     {
         std::cout << "Стек пуст" << std::endl;
@@ -140,13 +153,13 @@ void checkEmptyness(int *stackBase, int *stackPointer)
     }
 }
 
-void upperElement(int *stackBase, int *stackPointer)
+bool upperElement(int &upperEl, int *stackBase, int *stackPointer)
 {
     if(stackPointer == stackBase)
     {
-        std::cout << "Стек пуст" << std::endl;
-        return;
+        return 1;
     }
-    std::cout << "Верхний элемент = " << *(stackPointer-1) << std::endl;
+    upperEl = *(stackPointer-1);
+    return 0;
 }
 
