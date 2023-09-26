@@ -27,13 +27,14 @@ void printStack(T*, T*, T*);
 template<typename T>
 bool upperElement(T&, T*, T*);
 // Стек конец
-// ОПЗ - постфиксная запись
+// 2) ОПЗ - постфиксная запись
 bool opz(std::string *stackString, 
         std::string *stackBaseString, 
         std::string *stackPointerString, 
         int stacksizeString, 
         std::vector<std::string>,
         std::vector<std::string>&);
+// ОПЗ - постфиксная запись - конец
 
 int main(void)
 {
@@ -70,7 +71,6 @@ int main(void)
             failEnter = 0;
             continue;
         }
-        // break;
 
         if(choseInputExpression == 1)
         {
@@ -188,34 +188,7 @@ int main(void)
 
 // --- Организация стека конец
 
-// --- варианты использования стека
-    // int valueInt = 5;
-    // if(pushStack(valueInt, stackBaseInteger, &stackPointerInteger, stacksizeInteger))
-    // {
-    //     std::cout << "Стек полон" << std::endl;
-    // }
-
-    // pushStack(valueInt, stackBaseInteger, &stackPointerInteger, stacksizeInteger);
-
-    // std::string valueStr {"hello"};
-    // pushStack(valueStr, stackBaseString, &stackPointerString, stacksizeString);
-    // pushStack(valueStr, stackBaseString, &stackPointerString, stacksizeString);
-
-    // int upperElementInt;
-    // std::string upperElementString;
-    // if(popStack(upperElementInt, stackBaseInteger, &stackPointerInteger))
-    // {
-    //     std::cout << "Стек пуст" << std::endl;
-    // }
-    // popStack(upperElementString, stackBaseString, &stackPointerString);
-
-    // printStack(stackInteger, stackBaseInteger, stackPointerInteger);
-    // printStack(stackString, stackBaseString, stackPointerString);
-// --- варианты использования стека конец
-
-
-
-// --- выходная строка ОПЗ
+// --- Выходная строка ОПЗ
     std::vector<std::string> outputStringArray; 
     /*
         Перевод в ОПЗ
@@ -233,7 +206,11 @@ int main(void)
         std::cout << n << " ";
     std::cout << std::endl;
     // конец печати
-// --- выходная строка ОПЗ конец
+// --- Выходная строка ОПЗ конец
+
+
+
+
 
 
 
@@ -241,7 +218,7 @@ int main(void)
     return 0;
 }
 
-
+// 2) Обратная Польская Запись
 bool opz(std::string *stackString, 
         std::string *stackBaseString, 
         std::string *stackPointerString, 
@@ -385,6 +362,7 @@ bool opz(std::string *stackString,
                             continueThree = 0;
                             break;
                         }
+                        // 3.1.b.в.
                         std::string outputStack {};
                         checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
                         if(checkStack == 1) std::cout << "Стек пуст" << std::endl;
@@ -398,7 +376,7 @@ bool opz(std::string *stackString,
             break;
         }
     }
-    
+
     for(int i = 0; i < stackPointerString-stackBaseString+1; i++)
     {
         std::string outputStack {};
@@ -406,14 +384,6 @@ bool opz(std::string *stackString,
         if(checkStack == 1) std::cout << "Стек пуст" << std::endl;
         outputStringArray.push_back(outputStack);
     }
-    
-    // std::cout << "OPZ строка: ";
-    // for(std::string n : outputStringArray)
-    //     std::cout << n << " ";
-    // std::cout << "\n";
-
-    // printStack(stackString, stackBaseString, stackPointerString);
-
 
     return 0;
 }
