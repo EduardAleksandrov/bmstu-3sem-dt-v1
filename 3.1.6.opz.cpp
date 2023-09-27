@@ -38,6 +38,13 @@ bool opz(std::string *stackString,
         std::vector<std::string>&);
 // ОПЗ - постфиксная запись - конец
 
+int opzCalculation(double *stackDouble, 
+                    double *stackBaseDouble, 
+                    double *stackPointerDouble, 
+                    int stacksizeDouble, 
+                    std::vector<std::string> cleanOutputStringArray, 
+                    double &resultCalculation);
+
 int main(void)
 {
 // Вводные данные
@@ -50,7 +57,7 @@ int main(void)
     std::vector<std::string> inputStringArray; //массив токенов, входная строка
 
     // --- программные данные
-    std::string programExpression {"2^(cot(5)*5/5*x+sin(x)-(-66+22-cos(4))+50-x)"}; //программное выражение
+    std::string programExpression {"(2^23)*sin(4)"}; //программное выражение
     // {"2^(cot(5)*5/5*x+sin(x)-(-66+22-cos(4))+50-x)"}
     // "(2^2)*sin(4)"
     // 10+18*(1+7-8*2/(1/3)+1)+10
@@ -166,15 +173,15 @@ int main(void)
 
 
 // --- Организация стека
-    int *stackInteger;
+    double *stackDouble;
     std::string *stackString;
     
-    int stacksizeInteger {100};
+    int stacksizeDouble {100};
     int stacksizeString = inputStringArray.size();
 
     try
     {
-        stackInteger = new int[stacksizeInteger + 1];
+        stackDouble = new double[stacksizeDouble + 1];
         stackString = new std::string[stacksizeString + 1];
     }
     catch(const std::bad_alloc& e)
@@ -182,8 +189,8 @@ int main(void)
         std::cerr << e.what() << std::endl;
     }
 
-    int *stackBaseInteger = stackInteger;
-    int *stackPointerInteger = stackInteger;
+    double *stackBaseDouble = stackDouble;
+    double *stackPointerDouble = stackDouble;
 
     std::string *stackBaseString = stackString;
     std::string *stackPointerString = stackString;
@@ -198,9 +205,9 @@ int main(void)
         in - inputStringArray
         out - outputStringArray
     */
-    bool result = 0;
-    result = opz(stackString, stackBaseString, stackPointerString, stacksizeString, inputStringArray, outputStringArray);
-    if(result) exit(1);
+    bool errorResult {0};
+    errorResult = opz(stackString, stackBaseString, stackPointerString, stacksizeString, inputStringArray, outputStringArray);
+    if(errorResult) exit(1);
     
     // печать ОПЗ
     std::cout << "OPZ строка: ";
@@ -211,17 +218,237 @@ int main(void)
 // --- Выходная строка ОПЗ конец
 
 
+    std::vector<std::string> cleanOutputStringArray {};
+    cleanOutputStringArray = outputStringArray;
+    double resultCalculation {0};
+    int errorOpzCalculation {0};
+    errorOpzCalculation = opzCalculation(stackDouble, stackBaseDouble, stackPointerDouble, stacksizeDouble, cleanOutputStringArray, resultCalculation);
+
+    // 1- стек пуст, 2 стек полон, 3 деление на ноль, 4 - тангенс котангенс неопределен , 5 - не хватает аргументов в стеке
+    // 6 - В стеке больше одного числа или их нет
+
+    std::cout << "Результат выражения: " << resultCalculation << std::endl;
 
 
 
-
-    delete [] stackInteger;
-    stackInteger = nullptr;
+    delete [] stackDouble;
+    stackDouble = nullptr;
     delete [] stackString;
     stackString = nullptr;
 
     return 0;
 }
+
+int opzCalculation(double *stackDouble, 
+                    double *stackBaseDouble, 
+                    double *stackPointerDouble, 
+                    int stacksizeDouble, 
+                    std::vector<std::string> cleanOutputStringArray, 
+                    double &resultCalculation)
+{
+    // Количество аргументов операции
+    std::map<std::string, int> numArgOperations;
+    // установка значений
+    numArgOperations["+"] = 2;
+    numArgOperations["-"] = 2;
+    numArgOperations["*"] = 2;
+    numArgOperations["/"] = 2;
+    numArgOperations["^"] = 2;
+    numArgOperations["sin"] = 1;
+    numArgOperations["cos"] = 1;
+    numArgOperations["tan"] = 1;
+    numArgOperations["cot"] = 1;
+
+    std::string numbers {"0123456789"};
+    const unsigned short int numberOfElementsAllOperators {9};
+    std::array<std::string, numberOfElementsAllOperators> allOperators {"+","-","*","/","^","sin", "cos", "tan", "cot"};
+
+    bool checkStack = 0;
+    double count;
+    for(int i = 0; i < cleanOutputStringArray.size(); i++)
+    {
+        bool nextIter = 0;
+        for(int j = 0; j < numbers.length(); j++)
+        {
+            if(cleanOutputStringArray[i].substr(0, 1) == numbers.substr(j, 1))
+            {
+                checkStack = pushStack(std::stod(cleanOutputStringArray[i]), stackBaseDouble, &stackPointerDouble, stacksizeDouble);
+                if(checkStack == 1) 
+                {
+                    std::cout << "Стек полон" << std::endl;
+                    return 2; // стек полон
+                }
+                nextIter = 1;
+                break;
+            }
+        }
+        if(nextIter == 1) continue;
+        for(int j = 0; j < numberOfElementsAllOperators; j++)
+        {
+            if(cleanOutputStringArray[i] == allOperators[j])
+            {
+                int numArgInput = 0;
+                for (const auto& element : numArgOperations)
+                {
+                    if(element.first == cleanOutputStringArray[i]) numArgInput = element.second;
+                }
+                if(stackPointerDouble-stackBaseDouble >= numArgInput && numArgInput != 0)
+                {
+                    if(numArgInput == 2)
+                    {
+                        double a1 {0};
+                        double a2 {0};
+                        checkStack = popStack(a2, stackBaseDouble, &stackPointerDouble);
+                        if(checkStack == 1) 
+                        {
+                            std::cout << "Стек пуст" << std::endl;
+                            return 1;
+                        }
+                        checkStack = popStack(a1, stackBaseDouble, &stackPointerDouble);
+                        if(checkStack == 1) 
+                        {
+                            std::cout << "Стек пуст" << std::endl;
+                            return 1; // стек пуст
+                        }
+                        if(cleanOutputStringArray[i] == allOperators[0])
+                        {
+                            count = a1+a2;
+                            checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
+                            if(checkStack == 1) 
+                            {
+                                std::cout << "Стек полон" << std::endl;
+                                return 2; // стек полон
+                            }
+                        }
+                        if(cleanOutputStringArray[i] == allOperators[1])
+                        {
+                            count = a1-a2;
+                            checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
+                            if(checkStack == 1) 
+                            {
+                                std::cout << "Стек полон" << std::endl;
+                                return 2; // стек полон
+                            }
+                        }
+                        if(cleanOutputStringArray[i] == allOperators[2])
+                        {
+                            count = a1*a2;
+                            checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
+                            if(checkStack == 1) 
+                            {
+                                std::cout << "Стек полон" << std::endl;
+                                return 2; // стек полон
+                            }
+                        }
+                        if(cleanOutputStringArray[i] == allOperators[3])
+                        {
+                            if(a2 == 0) return 3; //деление на ноль
+                            count = a1/a2;
+                            checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
+                            if(checkStack == 1) 
+                            {
+                                std::cout << "Стек полон" << std::endl;
+                                return 2; // стек полон
+                            }
+                        }
+                        if(cleanOutputStringArray[i] == allOperators[4])
+                        {
+                            count = pow(a1, a2);
+                            checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
+                            if(checkStack == 1) 
+                            {
+                                std::cout << "Стек полон" << std::endl;
+                                return 2; // стек полон
+                            }
+                        }
+                    }
+                    if(numArgInput == 1)
+                    {
+                        double a1 {0};
+                        checkStack = popStack(a1, stackBaseDouble, &stackPointerDouble);
+                        if(checkStack == 1) 
+                        {
+                            std::cout << "Стек пуст" << std::endl;
+                            return 1;
+                        }
+                        if(cleanOutputStringArray[i] == allOperators[5])
+                        {
+                            count = sin(a1);
+                            checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
+                            if(checkStack == 1) 
+                            {
+                                std::cout << "Стек полон" << std::endl;
+                                return 2; // стек полон
+                            }
+                        }
+                        if(cleanOutputStringArray[i] == allOperators[6])
+                        {
+                            count = cos(a1);
+                            checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
+                            if(checkStack == 1) 
+                            {
+                                std::cout << "Стек полон" << std::endl;
+                                return 2; // стек полон
+                            }
+                        }
+                        if(cleanOutputStringArray[i] == allOperators[7])
+                        {
+                            if(std::isinf(tan(a1)) == 1) return 4; // функция не определена
+                            count = tan(a1);
+                            checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
+                            if(checkStack == 1) 
+                            {
+                                std::cout << "Стек полон" << std::endl;
+                                return 2; // стек полон
+                            }
+                        }
+                        if(cleanOutputStringArray[i] == allOperators[8])
+                        {
+                            if(std::isinf(1/tan(a1)) == 1) return 4; // функция не определена
+                            count = 1/tan(a1);
+                            checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
+                            if(checkStack == 1) 
+                            {
+                                std::cout << "Стек полон" << std::endl;
+                                return 2; // стек полон
+                            }
+                        }
+                    }
+                } else return 5; // не хватает аргументов
+            }
+        }
+    }
+
+    if(stackPointerDouble-stackBaseDouble == 1)
+    {
+        double resultFromStack {0};
+        checkStack = popStack(resultFromStack, stackBaseDouble, &stackPointerDouble);
+        if(checkStack == 1) 
+        {
+            std::cout << "Стек пуст" << std::endl;
+            return 1;
+        }
+        resultCalculation = round(resultFromStack*10000)/10000;
+    } else {
+        return 6; // В стеке больше одного числа или их нет
+    }
+
+    printStack(stackDouble, stackBaseDouble, stackPointerDouble);
+
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 2) Обратная Польская Запись
 bool opz(std::string *stackString, 
@@ -393,7 +620,7 @@ bool opz(std::string *stackString,
         }
     }
 
-    for(int i = 0; i < stackPointerString-stackBaseString; i++)
+    for(int i = 0; i < stackPointerString-stackBaseString+1; i++)
     {
         std::string outputStack {};
         checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
