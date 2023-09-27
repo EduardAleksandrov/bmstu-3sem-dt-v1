@@ -40,6 +40,7 @@ bool opz(std::string *stackString,
         std::vector<std::string>&);
 // ОПЗ - постфиксная запись - конец
 
+// 3) ОПЗ расчет итогового значения
 int opzCalculation(double *stackDouble, 
                     double *stackBaseDouble, 
                     double *stackPointerDouble, 
@@ -210,7 +211,11 @@ int main(void)
     */
     bool errorResult {0};
     errorResult = opz(stackString, stackBaseString, stackPointerString, stacksizeString, inputStringArray, outputStringArray);
-    if(errorResult) exit(1);
+    if(errorResult)
+    {
+        std::cout << "Стек либо полон, либо пуст - ошибка разбора opz";
+        exit(1);
+    }
     
     // печать ОПЗ
     std::cout << "OPZ строка: ";
@@ -276,7 +281,11 @@ int main(void)
             }
             bool errorResult {0};
             errorResult = opz(stackString, stackBaseString, stackPointerString, stacksizeString, inputStringArray, outputStringArray);
-            if(errorResult) exit(1);
+            if(errorResult)
+            {
+                std::cout << "Стек либо полон, либо пуст - ошибка разбора opz";
+                exit(1);
+            }
             cleanOutputStringArray = outputStringArray;
             // вставка x - конец
 
@@ -322,7 +331,11 @@ int main(void)
             }
             bool errorResult {0};
             errorResult = opz(stackString, stackBaseString, stackPointerString, stacksizeString, inputStringArray, outputStringArray);
-            if(errorResult) exit(1);
+            if(errorResult) 
+            {
+                std::cout << "Стек либо полон, либо пуст - ошибка разбора opz";
+                exit(1);
+            }
             cleanOutputStringArray = outputStringArray;
             // вставка x конец
 
@@ -343,12 +356,6 @@ int main(void)
 
 
 
-
-
-
-
-
-
     delete [] stackDouble;
     stackDouble = nullptr;
     delete [] stackString;
@@ -357,6 +364,7 @@ int main(void)
     return 0;
 }
 
+// 3) Обратная Польская Запись расчет
 int opzCalculation(double *stackDouble, 
                     double *stackBaseDouble, 
                     double *stackPointerDouble, 
@@ -558,16 +566,6 @@ return 0;
 
 
 
-
-
-
-
-
-
-
-
-
-
 // 2) Обратная Польская Запись
 bool opz(std::string *stackString, 
         std::string *stackBaseString, 
@@ -629,7 +627,11 @@ bool opz(std::string *stackString,
             if(inputStringArray[i] == brackets[0])
             {
                 checkStack = pushStack(inputStringArray[i], stackBaseString, &stackPointerString, stacksizeString);
-                if(checkStack == 1) std::cout << "Стек полон" << std::endl;
+                if(checkStack == 1) 
+                {
+                    // std::cout << "Стек полон" << std::endl;
+                    return 1;
+                }
                 break;
             }
             // 3.a
@@ -645,13 +647,17 @@ bool opz(std::string *stackString,
                         checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
                         if(checkStack == 1) 
                         {
-                            std::cout << "Стек пуст, ошибка разбора" << std::endl;
+                            // std::cout << "Стек пуст, ошибка разбора" << std::endl;
                             return 1;
                         } else outputStringArray.push_back(outputStack);
                     } else {
                         std::string outputStack {};
                         checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
-                        if(checkStack == 1) std::cout << "Стек пуст" << std::endl;
+                        if(checkStack == 1) 
+                        {
+                            // std::cout << "Стек пуст" << std::endl;
+                            return 1;
+                        }
                         break;
                     }
                 }
@@ -683,7 +689,11 @@ bool opz(std::string *stackString,
                     {
                         outputStringArray.push_back(numbers.substr(0, 1));
                         checkStack = pushStack(binaryOperators.substr(1, 1), stackBaseString, &stackPointerString, stacksizeString);
-                        if(checkStack == 1) std::cout << "Стек полон" << std::endl;
+                        if(checkStack == 1) 
+                        {
+                            // std::cout << "Стек полон" << std::endl;
+                            return 1;
+                        }
                         continueThree = 0;
                         break;
                     }
@@ -692,7 +702,11 @@ bool opz(std::string *stackString,
                     if(stackBaseString == stackPointerString)
                     {
                         checkStack = pushStack(inputStringArray[i], stackBaseString, &stackPointerString, stacksizeString);
-                        if(checkStack == 1) std::cout << "Стек полон" << std::endl;
+                        if(checkStack == 1) 
+                        {
+                            // std::cout << "Стек полон" << std::endl;
+                            return 1;
+                        }
                         continueThree = 0;
                         break;
                     // 3.1.b
@@ -700,11 +714,19 @@ bool opz(std::string *stackString,
                         // 3.1.b.a
                         std::string upperEl {};
                         checkStack = upperElement(upperEl, stackBaseString, stackPointerString);
-                        if(checkStack == 1) std::cout << "Стек пуст" << std::endl;
+                        if(checkStack == 1) 
+                        {
+                            // std::cout << "Стек пуст" << std::endl;
+                            return 1;
+                        }
                         if(upperEl == brackets[0])
                         {
                             checkStack = pushStack(inputStringArray[i], stackBaseString, &stackPointerString, stacksizeString);
-                            if(checkStack == 1) std::cout << "Стек полон" << std::endl; 
+                            if(checkStack == 1) 
+                            {
+                                // std::cout << "Стек полон" << std::endl;
+                                return 1;
+                            }
                             continueThree = 0;
                             break;
                         }
@@ -719,15 +741,22 @@ bool opz(std::string *stackString,
                         if(priorityStack < priorityInput)
                         {
                             checkStack = pushStack(inputStringArray[i], stackBaseString, &stackPointerString, stacksizeString);
-                            if(checkStack == 1) std::cout << "Стек полон" << std::endl;
+                            if(checkStack == 1)
+                            {
+                                // std::cout << "Стек полон" << std::endl;
+                                return 1;
+                            }
                             continueThree = 0;
                             break;
                         }
                         // 3.1.b.в.
                         std::string outputStack {};
                         checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
-                        if(checkStack == 1) std::cout << "Стек пуст" << std::endl;
-                        else outputStringArray.push_back(outputStack);
+                        if(checkStack == 1)
+                        {
+                            // std::cout << "Стек пуст" << std::endl;
+                            return 1;
+                        } else outputStringArray.push_back(outputStack);
                         continueThree = 1;
                         break;
                     }
@@ -754,8 +783,9 @@ bool opz(std::string *stackString,
         checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
         if(checkStack == 1) 
         {
-            std::cout << "Стек пуст" << std::endl;
-            break;
+            // std::cout << "Стек пуст" << std::endl;
+            return 1;
+            // break;
         } else outputStringArray.push_back(outputStack);
     }
     
