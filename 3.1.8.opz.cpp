@@ -881,7 +881,8 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
     int openBrackets {0}, closeBrackets {0}; //подсчет кавычек
 
     std::string promezString {};
-    bool signExist, checkUnar; // checkUnar - проверка sin, cos...; signExist - проверка символа на существование
+    bool signExist; // checkUnar - проверка sin, cos...; signExist - проверка символа на существование
+    // bool checkUnar; 
     for(int i = 0; i < inputString.length(); i++)
     {
         signExist = 0;
@@ -894,7 +895,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             {
                 promezString += inputString.substr(i, 1);
                 signExist = 1;
-                checkUnar = 0;
+                // checkUnar = 0;
                 continue;
             }
         }
@@ -906,7 +907,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             std::string minusSign {"%"};
             inputStringArray.push_back(minusSign);
             signExist = 1;
-            checkUnar = 0;
+            // checkUnar = 0;
             continue;
         }
         // первый элемент без скобок
@@ -915,7 +916,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             std::string minusSign {"%"};
             inputStringArray.push_back(minusSign);
             signExist = 1;
-            checkUnar = 0;
+            // checkUnar = 0;
             continue;
         }
         // не первый элемент без скобок
@@ -927,7 +928,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
                 std::string minusSign {"%"};
                 inputStringArray.push_back(minusSign);
                 signExist = 1;
-                checkUnar = 0;
+                // checkUnar = 0;
                 checkPreviousSign = 1;
                 break;
             }
@@ -947,7 +948,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
                 }
                 inputStringArray.push_back(binaryOperators.substr(j, 1));
                 signExist = 1;
-                checkUnar = 0;
+                // checkUnar = 0;
                 continue;
             }
         }
@@ -961,7 +962,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             inputStringArray.push_back(inputString.substr(i, 3));
             promezString = {};
             signExist = 1;
-            checkUnar = 1;
+            // checkUnar = 1;
             continue;
         }
 
@@ -981,7 +982,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             if(inputString.substr(i, 1) == brackets[1]) closeBrackets++;
 
             signExist = 1;
-            checkUnar = 0;
+            // checkUnar = 0;
             continue;
         }
 
@@ -991,7 +992,7 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
             inputStringArray.push_back(inputString.substr(i, 1));
             varX = 1;
             signExist = 1;
-            checkUnar = 0;
+            // checkUnar = 0;
             promezString = {};
             // проверка x предшествует числу
             bool checkNextElement = 0;
@@ -1019,7 +1020,11 @@ bool getTokenStringArray(std::string inputString, std::vector<std::string> &inpu
         }
         
         // проверка выражение на существование знака 
-        if(signExist == 0 && checkUnar == 0)
+        // if(signExist == 0 && checkUnar == 0)
+        // {
+        //     return 1;
+        // }
+        if(signExist == 0)
         {
             return 1;
         }
