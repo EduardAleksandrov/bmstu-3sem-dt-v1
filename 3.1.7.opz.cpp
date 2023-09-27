@@ -6,6 +6,7 @@
 // fixes
 // расчет функции добавлен 
 // расчет с шагом h добавлен - работает
+// Итоговая к показу
 
 #include <iostream>
 #include <cmath>
@@ -191,6 +192,7 @@ int main(void)
     catch(const std::bad_alloc& e)
     {
         std::cerr << e.what() << std::endl;
+        exit(1);
     }
 
     double *stackBaseDouble = stackDouble;
@@ -559,7 +561,7 @@ int opzCalculation(double *stackDouble,
         return 6; // В стеке больше одного числа или их нет
     }
 
-    printStack(stackDouble, stackBaseDouble, stackPointerDouble);
+    // printStack(stackDouble, stackBaseDouble, stackPointerDouble);
 
 return 0;
 }
@@ -790,7 +792,7 @@ bool opz(std::string *stackString,
     }
     
 
-    printStack(stackString, stackBaseString, stackPointerString);
+    // printStack(stackString, stackBaseString, stackPointerString);
 
     return 0;
 }
