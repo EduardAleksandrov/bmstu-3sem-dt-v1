@@ -13,7 +13,7 @@ int main(void)
         std::cout << x << " " << "\n";
     }
     printfun();
-        
+    std::cout << std::stod("0.5") << "\n";
     
     return 0;
 }
