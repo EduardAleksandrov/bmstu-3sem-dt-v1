@@ -393,7 +393,7 @@ bool opz(std::string *stackString,
         }
     }
 
-    for(int i = 0; i < stackPointerString-stackBaseString+1; i++)
+    for(int i = 0; i < stackPointerString-stackBaseString; i++)
     {
         std::string outputStack {};
         checkStack = popStack(outputStack, stackBaseString, &stackPointerString);
