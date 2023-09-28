@@ -77,6 +77,8 @@ int main(void)
     int choseInputExpression;
     for(;;)
     {
+        inputString = {};
+        inputStringArray = {};
         std::cout << "1.Ввести выражение" << std::endl;
         std::cout << "2.Использовать программное" << std::endl;
         std::cin >> choseInputExpression;
