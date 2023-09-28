@@ -276,8 +276,7 @@ int main(void)
                     variableToPushX += std::to_string(x);
                     variableToPushX += ")";
                     cleanInputString += variableToPushX;
-                }
-                cleanInputString+=inputString.substr(i, 1);
+                } else cleanInputString += inputString.substr(i, 1);
             }
             if(getTokenStringArray(cleanInputString, inputStringArray, varXX)) 
             {
@@ -326,8 +325,7 @@ int main(void)
                     variableToPushX += std::to_string(x);
                     variableToPushX += ")";
                     cleanInputString += variableToPushX;
-                }
-                cleanInputString+=inputString.substr(i, 1);
+                } else cleanInputString += inputString.substr(i, 1);
             }
             if(getTokenStringArray(cleanInputString, inputStringArray, varXX)) 
             {
