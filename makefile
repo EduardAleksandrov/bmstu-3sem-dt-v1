@@ -41,5 +41,7 @@ run3.1.7.opz:
 	g++ -std=c++17 ./3.1.7.opz.cpp -o ./build/3.1.7.opz -g && ./build/3.1.7.opz
 run3.1.8.opz:
 	g++ -std=c++17 ./3.1.8.opz.cpp -o ./build/3.1.8.opz -g && ./build/3.1.8.opz
+run3.1.9.opz:
+	g++ -std=c++17 ./3.1.9.opz.cpp -o ./build/3.1.9.opz -g && ./build/3.1.9.opz
 
 
