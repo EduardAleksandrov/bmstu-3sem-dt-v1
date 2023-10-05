@@ -83,6 +83,7 @@ int main(void)
         std::cout << "2.Использовать программное" << std::endl;
         std::cin >> choseInputExpression;
         failEnter = failCin();
+        std::cin.get(); // получение символа перевода строки для последующей работы getline()
         if(failEnter == 1)
         {
             failEnter = 0;
@@ -92,7 +93,8 @@ int main(void)
         if(choseInputExpression == 1)
         {
             std::cout << "Введите:" << std::endl;
-            std::cin >> inputString;
+            std::getline(std::cin, inputString);
+            // std::cin >> inputString;
             if(!getTokenStringArray(inputString, inputStringArray, varX))
             {
                 if(varX)
