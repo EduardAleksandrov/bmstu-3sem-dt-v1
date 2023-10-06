@@ -1,3 +1,4 @@
+// Task: расчет интеграла с шагом
 #include <iostream>
 #include <math.h>
 
