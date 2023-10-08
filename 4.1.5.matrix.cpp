@@ -1,9 +1,10 @@
 /*
-    Task: разреженные матрицы
+    Task: разреженные матрицы часть 1
     Получение данных из файлов
     Упаковка и распаковка
     Сумма
-    Проверка двух типов суммирования - работает
+    Проверка двух типов суммирования
+    К показу - работает
 */
 #include <iostream>
 #include <fstream>
@@ -45,7 +46,7 @@ int main(void)
     std::vector <std::vector<int>> matrix_one {};
     std::vector <std::vector<int>> matrix_two {};
     bool check;
-    
+
     check = get_data_to_matrix("4.1.1.matrix1.txt", matrix_one, one_size);
     if(check == 1)
     {
@@ -58,35 +59,18 @@ int main(void)
         std::cout << "Не хватает данных в файле 2" << std::endl;
         exit(1);
     }
-
-    // print_matrix(matrix_one);
-    // print_matrix(matrix_two);
     // --- получение матриц из файла конец
 
     // --- Расчет обычным сложением
     std::vector <std::vector<int>> result_ordinary_matrix {} ;
     result_ordinary_matrix = ordinary_sum(matrix_one, matrix_two);
-    // print_matrix(result_ordinary_matrix);
     // --- Расчет обычным сложением конец
 
-    if(one_size != two_size)
+    if(one_size != two_size || matrix_one.size() != matrix_two.size() || matrix_one.back().size() != matrix_two.back().size())
     {
         std::cout << "Размеры матриц не совпадают" << std::endl;
         exit(1);
     }
-
-
-
-
-    int zero_size {0};
-    std::vector <std::vector<int>> matrix_zero {};
-    check = get_data_to_matrix("4.1.1.matrix0.txt", matrix_zero, zero_size);
-    if(check == 1)
-    {
-        std::cout << "Не хватает данных в файле 1" << std::endl;
-        exit(1);
-    }
-    // print_matrix(matrix_zero);
 
     // --- упаковка матриц
     std::vector <int> AN_one {};
@@ -107,8 +91,6 @@ int main(void)
     sum_packed_matrix(AN_one, D_one, AN_two, D_two, AN_sum, D_sum);
     print_AN_D(AN_sum, D_sum);
     // --- сложение матриц конец
-
-
 
     // --- распаковка матриц
     std::vector <std::vector<int>> unpacked_matrix {};
@@ -186,7 +168,7 @@ std::vector <std::vector<int>> ordinary_sum(std::vector <std::vector<int>>& matr
     int n = matrix_one.size();
     int m = matrix_one.back().size();
 
-std::vector <std::vector<int>> result_matrix (n, std::vector<int>(m, 0));
+    std::vector <std::vector<int>> result_matrix (n, std::vector<int>(m, 0));
 
     for(int i = 0; i < n; i++)
     {
@@ -289,8 +271,7 @@ void unpackage(std::vector <std::vector<int>>& unpacked_matrix, std::vector <int
                 s++;
                 continue;
             }
-            
-            // unpacked_matrix[i][j] = 1;
+
             while(z<(D[k]-D[k-1]))
             {
                 unpacked_matrix[i][j] = AN[p++];
@@ -301,7 +282,6 @@ void unpackage(std::vector <std::vector<int>>& unpacked_matrix, std::vector <int
         k++;
     }
 
-    // print_matrix(unpacked_matrix);
     // заполнение симметричностью матрицы
     for(int i = 0; i < n; i++)
     {
@@ -310,9 +290,6 @@ void unpackage(std::vector <std::vector<int>>& unpacked_matrix, std::vector <int
             unpacked_matrix[i][j] = unpacked_matrix[j][i];
         }
     }
-
-    // print_matrix(unpacked_matrix);
-
 }
 
 void sum_packed_matrix(std::vector <int>& AN_one, 
@@ -346,8 +323,7 @@ void sum_packed_matrix(std::vector <int>& AN_one,
                 y--;
             }
         }
-        // x = D_one[i] - D_one[i-1];
-        // y = D_two[i] - D_two[i-1];
+
         if(x > y)
         {
             while(x>y)
@@ -357,8 +333,7 @@ void sum_packed_matrix(std::vector <int>& AN_one,
                 y--;
             }
         }
-        // x = D_one[i] - D_one[i-1];
-        // y = D_two[i] - D_two[i-1];
+
         if(x==y)
         {
             while(y>0)
@@ -385,12 +360,8 @@ void sum_packed_matrix(std::vector <int>& AN_one,
 
         }
         check = 0;
-        // print_AN_D(AN_sum, D_sum);
         D_sum.push_back(AN_sum.size());
     }
-
-    // print_AN_D(AN_sum, D_sum);
-
 }
 
 bool compare_matrix(std::vector <std::vector<int>>& unpacked_matrix, std::vector <std::vector<int>>& result_ordinary_matrix)
