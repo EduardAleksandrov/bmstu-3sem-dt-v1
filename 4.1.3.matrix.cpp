@@ -79,7 +79,7 @@ int main(void)
     std::vector <int> AN_one {};
     std::vector <int> D_one {};
 
-    package(matrix_zero, AN_one, D_one);
+    package(matrix_two, AN_one, D_one);
     print_AN_D(AN_one, D_one);
     // --- упаковка матриц конец
 

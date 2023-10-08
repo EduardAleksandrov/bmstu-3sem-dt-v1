@@ -47,7 +47,7 @@ run3.1.9.opz:
 
 run4.1.1.matrix:
 	g++ -std=c++17 ./4.1.1.matrix.cpp -o ./build/4.1.1.matrix -g && ./build/4.1.1.matrix
-
 run4.1.2.matrix:
 	g++ -std=c++17 ./4.1.2.matrix.cpp -o ./build/4.1.2.matrix -g && ./build/4.1.2.matrix
-
+run4.1.3.matrix:
+	g++ -std=c++17 ./4.1.3.matrix.cpp -o ./build/4.1.3.matrix -g && ./build/4.1.3.matrix
