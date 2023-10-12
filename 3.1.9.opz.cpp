@@ -9,7 +9,8 @@
 // расчет с шагом h добавлен - работает
 // Итоговая к показу
 // Можно ставить унарный минус без скобок
-// добавлена функция clean() для строк и вектора - работает
+// добавлена функция clean() для строк и вектора
+// добавлена проверка функции pow - работает
 
 #include <iostream>
 #include <cmath>
@@ -248,7 +249,7 @@ int main(void)
             if(errorOpzCalculation == 1) std::cout << "Стек пуст не хватает чисел" << std::endl;
             if(errorOpzCalculation == 2) std::cout << "Стек полон" << std::endl;
             if(errorOpzCalculation == 3) std::cout << "Деление на ноль" << std::endl;
-            if(errorOpzCalculation == 4) std::cout << "Тангенс/котангенс неопределен" << std::endl;
+            if(errorOpzCalculation == 4) std::cout << "Тангенс/котангенс неопределен, функция не определена" << std::endl;
             if(errorOpzCalculation == 5) std::cout << "Не хватает аргументов в стеке" << std::endl;
             if(errorOpzCalculation == 6) std::cout << "В стеке больше одного числа или их нет, не хватает знаков" << std::endl;
             exit(1);
@@ -308,7 +309,7 @@ int main(void)
                 exit(1);
             } else if(errorOpzCalculation == 3 || errorOpzCalculation == 4){
                 if(errorOpzCalculation == 3) std::cout << "Для x= " << x << " --- Деление на ноль" << std::endl;
-                if(errorOpzCalculation == 4) std::cout << "Для x= " << x << " --- Тангенс/котангенс неопределен" << std::endl;
+                if(errorOpzCalculation == 4) std::cout << "Для x= " << x << " --- Тангенс/котангенс неопределен, функция не определена" << std::endl;
             } else std::cout << "Для x= " << x << " результат выражения: " << resultCalculation << std::endl;
             xnew+= h;
         }
@@ -359,7 +360,7 @@ int main(void)
                 exit(1);
             } else if(errorOpzCalculation == 3 || errorOpzCalculation == 4){
                 if(errorOpzCalculation == 3) std::cout << "Для x= " << x << " --- Деление на ноль" << std::endl;
-                if(errorOpzCalculation == 4) std::cout << "Для x= " << x << " --- Тангенс/котангенс неопределен" << std::endl;
+                if(errorOpzCalculation == 4) std::cout << "Для x= " << x << " --- Тангенс/котангенс неопределен, функция не определена" << std::endl;
             } else std::cout << "Для x= " << x << " результат выражения: " << resultCalculation << std::endl;
         }
     }
@@ -491,6 +492,7 @@ int opzCalculation(double *stackDouble,
                         }
                         if(cleanOutputStringArray[i] == allOperators[4])
                         {
+                            if(std::isnan(pow(a1, a2)) == 1) return 4;
                             count = pow(a1, a2);
                             checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
                             if(checkStack == 1) 
