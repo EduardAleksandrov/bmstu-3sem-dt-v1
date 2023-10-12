@@ -4,7 +4,8 @@
     Упаковка и распаковка
     Сумма
     Проверка двух типов суммирования
-    К показу - работает
+    К показу
+    Исправления от преподавателя - работает
 */
 #include <iostream>
 #include <fstream>
@@ -95,6 +96,7 @@ int main(void)
     // --- распаковка матриц
     std::vector <std::vector<int>> unpacked_matrix {};
     unpackage(unpacked_matrix, AN_sum, D_sum);
+    print_matrix(unpacked_matrix);
     // --- распаковка матриц конец
 
     // --- сравнение выриантов сложения
@@ -265,7 +267,7 @@ void unpackage(std::vector <std::vector<int>>& unpacked_matrix, std::vector <int
                 continue;
             }
 
-            if((D[k]-D[k-1])<(i+1-s))
+            if((D[k]-D[k-1])<(i+1-s)) // заполняем вначале нулями до числа
             {
                 unpacked_matrix[i][j] = 0;
                 s++;
@@ -312,7 +314,7 @@ void sum_packed_matrix(std::vector <int>& AN_one,
             k2++;
             continue;
         }
-        int x = D_one[i] - D_one[i-1];
+        int x = D_one[i] - D_one[i-1]; // количество элементов
         int y = D_two[i] - D_two[i-1];
         if(x < y)
         {
@@ -330,7 +332,7 @@ void sum_packed_matrix(std::vector <int>& AN_one,
             {
                 AN_sum.push_back(AN_one[k1++]);
                 check = 1;
-                y--;
+                x--;
             }
         }
 
@@ -345,9 +347,11 @@ void sum_packed_matrix(std::vector <int>& AN_one,
                     k2++;
                     break;
                 }
+                // 1 0 3 + 2 0 8
                 if(AN_one[k1]+AN_two[k2] != 0) 
                 {
                     AN_sum.push_back(AN_one[k1]+AN_two[k2]);
+                    check = 1;
                 }
                 if(check == 1 && AN_one[k1]+AN_two[k2] == 0) 
                 {
