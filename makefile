@@ -55,3 +55,8 @@ run4.1.4.matrix:
 	g++ -std=c++17 ./4.1.4.matrix.cpp -o ./build/4.1.4.matrix -g && ./build/4.1.4.matrix
 run4.1.5.matrix:
 	g++ -std=c++17 ./4.1.5.matrix.cpp -o ./build/4.1.5.matrix -g && ./build/4.1.5.matrix
+
+run_4.2.1.matrix:
+	g++ -std=c++17 ./4.2.1.matrix.cpp -o ./build/4.2.1.matrix -g && ./build/4.2.1.matrix
+run_4.2.2.matrix:
+	g++ -std=c++17 ./4.2.2.matrix.cpp -o ./build/4.2.2.matrix -g && ./build/4.2.2.matrix
