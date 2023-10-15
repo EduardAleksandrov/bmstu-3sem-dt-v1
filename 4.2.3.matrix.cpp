@@ -1,7 +1,9 @@
 /*
     Task: разреженные матрицы часть 2. Кольцевая схема Рейндболта - Местеньи (КРМ)
     Получение данных из файла
-    Упаковка матрицы кольцевая - работает
+    Упаковка матрицы кольцевая 
+    Распаковка
+    Расчет индекса элемента в распаковке и отдельной функцией - работает
 */
 
 
@@ -29,9 +31,23 @@ void print_packed_matrix(std::vector <int>&,
                         std::vector <int>&, 
                         std::vector <int>&);
 
+void unpackage(std::vector <std::vector<int>>&,
+                std::vector <int>&, 
+                std::vector <int>&, 
+                std::vector <int>&, 
+                std::vector <int>&, 
+                std::vector <int>&);
+
+bool get_index(int, int&, int&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&, 
+                std::vector <int>&, 
+                std::vector <int>&);
+
 int main()
 {
-    std::string file[] {"4.2.1.matrix_1.txt", "4.2.1.matrix_2.txt", "4.2.1.matrix_0.txt", "4.2.1.matrix_test2.txt"};
+    std::string file[] {"4.2.1.matrix_1.txt", "4.2.1.matrix_2.txt", "4.2.1.matrix_0.txt", "4.2.1.matrix_0_knut.txt", "4.2.1.matrix_test2.txt"};
     // int file_size = sizeof(file)/sizeof(file[0]);
     // int file_index_one;
     // int file_index_two;
@@ -61,7 +77,7 @@ int main()
 // --- Ввод матриц из файла
     std::vector <std::vector<int>> matrix_one {};
     // get_data(file[file_index_one-1], matrix_one);
-    get_data(file[2], matrix_one);
+    get_data(file[1], matrix_one);
     print_matrix(matrix_one);
 
     // std::vector <std::vector<int>> matrix_two {};
@@ -80,6 +96,21 @@ int main()
     check_matrix_one = package(matrix_one, A_AN, A_NR, A_NC, A_JR, A_JC);
     print_packed_matrix(A_AN, A_NR, A_NC, A_JR, A_JC);
 // --- упаковка матриц конец
+
+// --- распаковка матрицы
+    std::vector <std::vector<int>> unpackage_matrix {};
+    unpackage(unpackage_matrix, A_AN, A_NR, A_NC, A_JR, A_JC);
+    print_matrix(unpackage_matrix);
+// --- распаковка матрицы конец
+
+// получение элемента по индексу AN
+    int i_index, j_index;
+    bool check_index;
+    check_index = get_index(0, i_index, j_index, A_AN, A_NR, A_NC, A_JR, A_JC);
+    if(check_index) std::cout << "Такого индекса в AN нет" << std::endl;
+    // std::cout << i_index << " " << j_index << "\n";
+
+
 
 
 
@@ -332,6 +363,112 @@ void print_packed_matrix(std::vector <int>& AN,
     std::cout << std::endl << std::endl;;
 }
 
+void unpackage(std::vector <std::vector<int>>& matrix,
+                std::vector <int>& AN, 
+                std::vector <int>& NR, 
+                std::vector <int>& NC, 
+                std::vector <int>& JR, 
+                std::vector <int>& JC)
+{
+    // инициализация матрицы нулями
+    for(int i = 0; i < JR.size(); i++)
+    {
+        matrix.push_back(std::vector<int>());
+        for(int j = 0; j < JC.size(); j++)
+        {
+            matrix.back().push_back(0);
+        }
+    }
+    // восстановление индексов
+    int i_index;
+    int j_index;
+    bool i_check;
+    bool j_check;
+    for(int i = 0; i < AN.size(); i++)
+    {
+        i_check = 1;
+        int r = i+1;
+        while(i_check)
+        {
+            for(int j = 0; j < JR.size(); j++)
+            {
+                if(r == JR[j])
+                {
+                    i_index = j;
+                    i_check = 0; // если нашли, то прерываем циклы
+                    break;
+                }
+            }
+            if(i_check == 0) break;
+            r = NR[r-1];
+        }
+        j_check = 1;
+        int col = i+1;
+        while(j_check)
+        {
+            for(int j = 0; j < JC.size(); j++)
+            {
+                if(col == JC[j])
+                {
+                    j_index = j;
+                    j_check = 0;
+                    break;
+                }
+            }
+            if(j_check == 0) break;
+            col = NC[col-1];
+        }
+        matrix[i_index][j_index] = AN[i];
+        // std::cout << i_index << " " << j_index << " " << AN[i] << "\n";
+    }
+    // std::cout << std::endl;
+}
 
+bool get_index(int index_AN,  // AN начинается с нуля
+                int &i_index, 
+                int &j_index,
+                std::vector <int>& AN,
+                std::vector <int>& NR, 
+                std::vector <int>& NC, 
+                std::vector <int>& JR, 
+                std::vector <int>& JC)
+{
+    if(index_AN < 0 || index_AN >= AN.size()) return 1; // проверка на существование элемента
+    bool i_check;
+    bool j_check;
+    int i = index_AN;
 
-
+    i_check = 1;
+    int r = i+1; // по табличке
+    while(i_check)
+    {
+        for(int j = 0; j < JR.size(); j++)
+        {
+            if(r == JR[j])
+            {
+                i_index = j;
+                i_check = 0; // если нашли, то прерываем циклы
+                break;
+            }
+        }
+        if(i_check == 0) break;
+        r = NR[r-1];
+    }
+    j_check = 1;
+    int col = i+1;
+    while(j_check)
+    {
+        for(int j = 0; j < JC.size(); j++)
+        {
+            if(col == JC[j])
+            {
+                j_index = j;
+                j_check = 0;
+                break;
+            }
+        }
+        if(j_check == 0) break;
+        col = NC[col-1];
+    }
+    return 0;
+}
