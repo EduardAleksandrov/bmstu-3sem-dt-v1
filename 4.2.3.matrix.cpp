@@ -3,7 +3,8 @@
     Получение данных из файла
     Упаковка матрицы кольцевая 
     Распаковка
-    Расчет индекса элемента в распаковке и отдельной функцией - работает
+    Расчет индекса элемента в распаковке и отдельной функцией 
+    Добавлены простое сложение и умножение - работает
 */
 
 
@@ -13,37 +14,42 @@
 #include <sstream>
 #include <vector>
 
-    
+// получение данных
 void get_data(std::string, std::vector <std::vector<int>>&);
-
+// печать обычной матрицы
 void print_matrix(std::vector <std::vector<int>>&);
-
+// упаковка матрицы
 bool package(std::vector <std::vector<int>>&, 
             std::vector <int>&, 
             std::vector <int>&, 
             std::vector <int>&, 
             std::vector <int>&, 
             std::vector <int>&);
-
+// печать упакованной матрицы
 void print_packed_matrix(std::vector <int>&, 
                         std::vector <int>&, 
                         std::vector <int>&, 
                         std::vector <int>&, 
                         std::vector <int>&);
-
+// распаковка матрицы
 void unpackage(std::vector <std::vector<int>>&,
                 std::vector <int>&, 
                 std::vector <int>&, 
                 std::vector <int>&, 
                 std::vector <int>&, 
                 std::vector <int>&);
-
+// индекс элемента из упакованной матрицы
 bool get_index(int, int&, int&,
                 std::vector <int>&,
                 std::vector <int>&,
                 std::vector <int>&, 
                 std::vector <int>&, 
                 std::vector <int>&);
+// простое умножение
+bool simple_multiply(std::vector <std::vector<int>>&, std::vector <std::vector<int>>&, std::vector <std::vector<int>>&);
+// простое сложение
+void simple_sum(std::vector <std::vector<int>>&, std::vector <std::vector<int>>&, std::vector <std::vector<int>>&);
+
 
 int main()
 {
@@ -77,13 +83,54 @@ int main()
 // --- Ввод матриц из файла
     std::vector <std::vector<int>> matrix_one {};
     // get_data(file[file_index_one-1], matrix_one);
-    get_data(file[1], matrix_one);
+    get_data(file[0], matrix_one);
     print_matrix(matrix_one);
 
-    // std::vector <std::vector<int>> matrix_two {};
-    // get_data(file[1], matrix_two);
-    // print_matrix(matrix_two);
+    std::vector <std::vector<int>> matrix_two {};
+    get_data(file[1], matrix_two);
+    print_matrix(matrix_two);
 // --- Ввод матриц из файла конец
+
+// --- проверка на сложение и умножение
+    bool simple_mul_check {0};
+    // if(matrix_one.size() != matrix_two.back().size() || matrix_one.back().size() != matrix_two.size()) 
+    if(matrix_one.back().size() != matrix_two.size())
+    {
+        std::cout << "Матрицы не могут быть перемножены" << std::endl;
+        simple_mul_check = 1;
+    }
+    bool simple_sum_check {0};
+    if(matrix_one.size() != matrix_two.size() || matrix_one.back().size() != matrix_two.back().size())
+    {
+        std::cout << "Размеры матриц не совпадают для сложения" << std::endl;
+        simple_sum_check = 1;
+    }
+// --- проверка на сложение и умножение конец
+
+// --- простое умножение
+    std::vector <std::vector<int>> simple_multi_matrix {};
+    if(!simple_mul_check)
+    {
+        bool check_simple_multi;
+        check_simple_multi = simple_multiply(simple_multi_matrix, matrix_one, matrix_two);
+        if(check_simple_multi) 
+        {
+            std::cout << "Матрицы не могут быть перемножены" << std::endl;
+        } else {
+            print_matrix(simple_multi_matrix);
+        }
+    }
+// --- простое умножение конец
+// --- простое сложение
+    std::vector <std::vector<int>> simple_sum_matrix {};
+    if(!simple_sum_check)
+    {
+        simple_sum(simple_sum_matrix, matrix_one, matrix_two);
+        print_matrix(simple_sum_matrix);
+    }
+// --- простое сложение конец
+
+
 
 // --- упаковка матриц
     std::vector <int> A_AN {};
@@ -103,13 +150,13 @@ int main()
     print_matrix(unpackage_matrix);
 // --- распаковка матрицы конец
 
-// получение элемента по индексу AN
+// --- получение элемента по индексу AN
     int i_index, j_index;
     bool check_index;
     check_index = get_index(0, i_index, j_index, A_AN, A_NR, A_NC, A_JR, A_JC);
     if(check_index) std::cout << "Такого индекса в AN нет" << std::endl;
     // std::cout << i_index << " " << j_index << "\n";
-
+// --- получение элемента по индексу AN конец
 
 
 
@@ -274,7 +321,7 @@ bool package(std::vector <std::vector<int>>& matrix,
                 for(int n = j; n < matrix.back().size(); n++)
                 {
                     flag_row = 0;
-                    if(matrix[i][n] != 0 && n>j)
+                    if(matrix[i][n] != 0 && n>j) // идем по столбцам
                     {
                         NR[k] = k+2;
                         // std::cout << NR[k] << " ";
@@ -295,7 +342,7 @@ bool package(std::vector <std::vector<int>>& matrix,
                 for(int m = i; m < matrix.size(); m++)
                 {
                     flag_column = 0;
-                    if(matrix[m][j] != 0 && m>i)
+                    if(matrix[m][j] != 0 && m>i) // идем по строкам
                     {
                         // счетчик элементов
                         count = 0;
@@ -472,3 +519,46 @@ bool get_index(int index_AN,  // AN начинается с нуля
     }
     return 0;
 }
+
+bool simple_multiply(std::vector <std::vector<int>>& simple_multi_matrix, 
+                    std::vector <std::vector<int>>& matrix_one, 
+                    std::vector <std::vector<int>>& matrix_two)
+{
+    if(matrix_one.back().size() != matrix_two.size()) return 1;
+    int mul {0};
+    for(int i = 0; i < matrix_one.size(); i++)  // a.JR
+    {
+        simple_multi_matrix.push_back(std::vector<int>());
+        for(int j = 0; j < matrix_two.back().size(); j++) // b.JC
+        {
+            for(int jj = 0; jj < matrix_one.back().size(); jj++) // a.JC
+            {
+                mul+=matrix_one[i][jj]*matrix_two[jj][j];
+            }
+            simple_multi_matrix.back().push_back(mul);
+            mul = 0;
+        }
+    }
+    return 0;
+}
+
+void simple_sum(std::vector <std::vector<int>>& simple_sum_matrix, 
+                std::vector <std::vector<int>>& matrix_one, 
+                std::vector <std::vector<int>>& matrix_two)
+{
+    int n = matrix_one.size();
+    int m = matrix_one.back().size();
+
+    for(int i = 0; i < n; i++)
+    {
+        simple_sum_matrix.push_back(std::vector<int>());
+        for(int j = 0; j < m; j++)
+        {
+            simple_sum_matrix.back().push_back(matrix_one[i][j] + matrix_two[i][j]);
+        }
+    }
+}
+
+
+
+
