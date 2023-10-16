@@ -4,7 +4,8 @@
     Упаковка матрицы кольцевая 
     Распаковка
     Расчет индекса элемента в распаковке и отдельной функцией 
-    Добавлены простое сложение и умножение - работает
+    Добавлены простое сложение и умножение 
+    Вводим индекс i,j возвращаем число - работает
 */
 
 
@@ -49,11 +50,24 @@ bool get_index(int, int&, int&,
 bool simple_multiply(std::vector <std::vector<int>>&, std::vector <std::vector<int>>&, std::vector <std::vector<int>>&);
 // простое сложение
 void simple_sum(std::vector <std::vector<int>>&, std::vector <std::vector<int>>&, std::vector <std::vector<int>>&);
-
+// вводим i, j в упакованную матрицу получаем число
+void get_data_by_index(int&, int, int,
+                    std::vector <int>&,
+                    std::vector <int>&,
+                    std::vector <int>&, 
+                    std::vector <int>&, 
+                    std::vector <int>&);
 
 int main()
 {
-    std::string file[] {"4.2.1.matrix_1.txt", "4.2.1.matrix_2.txt", "4.2.1.matrix_0.txt", "4.2.1.matrix_0_knut.txt", "4.2.1.matrix_test2.txt"};
+    std::string file[] {"4.2.1.matrix_1.txt", 
+                        "4.2.1.matrix_2.txt", 
+                        "4.2.1.matrix_result.txt",
+                        "4.2.1.matrix_0.txt",
+                        "4.2.1.matrix_random_1.txt", 
+                        "4.2.1.matrix_random_2.txt", 
+                        "4.2.1.matrix_0_knut.txt", 
+                        "4.2.1.matrix_test2.txt"};
     // int file_size = sizeof(file)/sizeof(file[0]);
     // int file_index_one;
     // int file_index_two;
@@ -83,7 +97,7 @@ int main()
 // --- Ввод матриц из файла
     std::vector <std::vector<int>> matrix_one {};
     // get_data(file[file_index_one-1], matrix_one);
-    get_data(file[0], matrix_one);
+    get_data(file[2], matrix_one);
     print_matrix(matrix_one);
 
     std::vector <std::vector<int>> matrix_two {};
@@ -158,8 +172,13 @@ int main()
     // std::cout << i_index << " " << j_index << "\n";
 // --- получение элемента по индексу AN конец
 
-
-
+// --- получение элемента по индексу i, j
+    int data {0};
+    int ii_index = 2;
+    int jj_index = 0;
+    get_data_by_index(data, ii_index, jj_index,A_AN, A_NR, A_NC, A_JR, A_JC);
+    std::cout << data << std::endl;
+// --- получение элемента по индексу i, j конец
 
 
 
@@ -167,6 +186,11 @@ int main()
     return 0;
 }
 
+
+/*
+ in: file
+ out: matrix
+*/
 void get_data(std::string file, std::vector <std::vector<int>>& matrix)
 {
     std::ifstream in;
@@ -257,7 +281,9 @@ void get_data(std::string file, std::vector <std::vector<int>>& matrix)
 
     in.close(); 
 }
-
+/*
+ in: matrix
+*/
 void print_matrix(std::vector <std::vector<int>>& matrix)
 {
     for(int i = 0; i < matrix.size(); i++)
@@ -268,7 +294,10 @@ void print_matrix(std::vector <std::vector<int>>& matrix)
     }
     std::cout << std::endl;
 }
-
+/*
+ in: AN, NR, NC, JR, JC
+ out: matrix
+*/
 bool package(std::vector <std::vector<int>>& matrix, 
             std::vector <int>& AN, 
             std::vector <int>& NR, 
@@ -381,7 +410,9 @@ bool package(std::vector <std::vector<int>>& matrix,
     }
     return 0;
 }
-
+/*
+ in: AN, NR, NC, JR, JC
+*/
 void print_packed_matrix(std::vector <int>& AN, 
                         std::vector <int>& NR, 
                         std::vector <int>& NC, 
@@ -409,7 +440,10 @@ void print_packed_matrix(std::vector <int>& AN,
         std::cout << NC[i] << " ";
     std::cout << std::endl << std::endl;;
 }
-
+/*
+ in: AN, NR, NC, JR, JC
+ out: matrix
+*/
 void unpackage(std::vector <std::vector<int>>& matrix,
                 std::vector <int>& AN, 
                 std::vector <int>& NR, 
@@ -470,7 +504,10 @@ void unpackage(std::vector <std::vector<int>>& matrix,
     }
     // std::cout << std::endl;
 }
-
+/*
+ in: index_AN, AN, NR, NC, JR, JC
+ out: i_index, j_index
+*/
 bool get_index(int index_AN,  // AN начинается с нуля
                 int &i_index, 
                 int &j_index,
@@ -519,7 +556,10 @@ bool get_index(int index_AN,  // AN начинается с нуля
     }
     return 0;
 }
-
+/*
+ in: matrix_one, matrix_two
+ out: simple_multi_matrix
+*/
 bool simple_multiply(std::vector <std::vector<int>>& simple_multi_matrix, 
                     std::vector <std::vector<int>>& matrix_one, 
                     std::vector <std::vector<int>>& matrix_two)
@@ -541,7 +581,10 @@ bool simple_multiply(std::vector <std::vector<int>>& simple_multi_matrix,
     }
     return 0;
 }
-
+/*
+ in: matrix_one, matrix_two
+ out: simple_sum_matrix
+*/
 void simple_sum(std::vector <std::vector<int>>& simple_sum_matrix, 
                 std::vector <std::vector<int>>& matrix_one, 
                 std::vector <std::vector<int>>& matrix_two)
@@ -556,6 +599,65 @@ void simple_sum(std::vector <std::vector<int>>& simple_sum_matrix,
         {
             simple_sum_matrix.back().push_back(matrix_one[i][j] + matrix_two[i][j]);
         }
+    }
+}
+
+/*
+ in: ii_index, jj_index, AN, NR, NC, JR, JC
+ out: data
+*/
+void get_data_by_index(int& data, int ii_index, int jj_index,
+                    std::vector <int>& AN,
+                    std::vector <int>& NR, 
+                    std::vector <int>& NC, 
+                    std::vector <int>& JR, 
+                    std::vector <int>& JC)
+{
+// восстановление индексов
+    data = 0;
+    int i_index;
+    int j_index;
+    bool i_check;
+    bool j_check;
+    for(int i = 0; i < AN.size(); i++)
+    {
+        i_check = 1;
+        int r = i+1;
+        while(i_check)
+        {
+            for(int j = 0; j < JR.size(); j++)
+            {
+                if(r == JR[j])
+                {
+                    i_index = j;
+                    i_check = 0; // если нашли, то прерываем циклы
+                    break;
+                }
+            }
+            if(i_check == 0) break;
+            r = NR[r-1];
+        }
+        j_check = 1;
+        int col = i+1;
+        while(j_check)
+        {
+            for(int j = 0; j < JC.size(); j++)
+            {
+                if(col == JC[j])
+                {
+                    j_index = j;
+                    j_check = 0;
+                    break;
+                }
+            }
+            if(j_check == 0) break;
+            col = NC[col-1];
+        }
+        if(i_index == ii_index && j_index == jj_index)
+        {
+            data = AN[i];
+            return;
+        } 
     }
 }
 
