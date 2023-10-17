@@ -721,6 +721,12 @@ void sum_matrix(std::vector <int>& A_AN,
                 std::vector <int>& JR,
                 std::vector <int>& JC)
 {
+    // инициализировали JR JC
+    for(int i = 0; i < A_JR.size(); i++)
+        JR.push_back(-1);
+    for(int i = 0; i < A_JC.size(); i++)
+        JC.push_back(-1);
+
     int t_one {0}; // индекс в A_AN
     int t_two {0}; // индекс в B_AN
     int i_A, j_A;
@@ -736,6 +742,9 @@ void sum_matrix(std::vector <int>& A_AN,
             while(t_two < B_AN.size())
             {
                 AN.push_back(B_AN[t_two]);
+                get_index(t_two, i_B, j_B, B_AN, B_NR, B_NC, B_JR, B_JC);
+                if(JR[i_B] == -1) JR[i_B] = AN.size();
+                if(JC[j_B] == -1) JC[j_B] = AN.size();
                 t_two++;
             }
             break;
@@ -747,6 +756,9 @@ void sum_matrix(std::vector <int>& A_AN,
             while(t_one < A_AN.size())
             {
                 AN.push_back(A_AN[t_one]);
+                get_index(t_one, i_A, j_A, A_AN, A_NR, A_NC, A_JR, A_JC);
+                if(JR[i_A] == -1) JR[i_A] = AN.size();
+                if(JC[j_A] == -1) JC[j_A] = AN.size();
                 t_one++;
             }
             break;
@@ -755,21 +767,29 @@ void sum_matrix(std::vector <int>& A_AN,
         if(i_A < i_B)
         {
             AN.push_back(A_AN[t_one]);
+            if(JR[i_A] == -1) JR[i_A] = AN.size();
+            if(JC[j_A] == -1) JC[j_A] = AN.size();
             t_one++;
         }
         if(i_A == i_B && j_A < j_B)
         {
             AN.push_back(A_AN[t_one]);
+            if(JR[i_A] == -1) JR[i_A] = AN.size();
+            if(JC[j_A] == -1) JC[j_A] = AN.size();
             t_one++;
         }
         if(i_B < i_A)
         {
             AN.push_back(B_AN[t_two]);
+            if(JR[i_B] == -1) JR[i_B] = AN.size();
+            if(JC[j_B] == -1) JC[j_B] = AN.size();
             t_two++;
         }
         if(i_A == i_B && j_A > j_B)
         {
             AN.push_back(B_AN[t_two]);
+            if(JR[i_B] == -1) JR[i_B] = AN.size();
+            if(JC[j_B] == -1) JC[j_B] = AN.size();
             t_two++;
         }
         if(i_A == i_B && j_A == j_B)
@@ -777,7 +797,10 @@ void sum_matrix(std::vector <int>& A_AN,
             if(A_AN[t_one] + B_AN[t_two] != 0)
             {
                 AN.push_back(A_AN[t_one] + B_AN[t_two]);
+                if(JR[i_A] == -1) JR[i_A] = AN.size();
+                if(JC[j_A] == -1) JC[j_A] = AN.size();
             }
+            
             t_one++;
             t_two++;
         }
