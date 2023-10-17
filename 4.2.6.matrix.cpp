@@ -6,8 +6,8 @@
     Расчет индекса элемента в распаковке и отдельной функцией 
     Добавлены простое сложение и умножение 
     Вводим индекс i,j возвращаем число
-    Сумма + учет нулевых матриц - работает
-    Умножение
+    Сумма + учет нулевых матриц
+    Умножение - работает
 */
 
 
@@ -75,6 +75,22 @@ void sum_matrix(std::vector <int>&,
                 std::vector <int>&,
                 std::vector <int>&,
                 std::vector <int>&);
+// умножение упакованных матриц
+void mul_matrix(std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&,
+                std::vector <int>&);
 
 
 int main()
@@ -86,7 +102,8 @@ int main()
                         "4.2.1.matrix_random_1.txt", 
                         "4.2.1.matrix_random_2.txt", 
                         "4.2.1.matrix_0_knut.txt", 
-                        "4.2.1.matrix_test2.txt"};
+                        "4.2.1.matrix_test2.txt",
+                        "4.2.1.matrix_test3.txt"};
     // int file_size = sizeof(file)/sizeof(file[0]);
     // int file_index_one;
     // int file_index_two;
@@ -116,11 +133,13 @@ int main()
 // --- Ввод матриц из файла
     std::vector <std::vector<int>> matrix_one {};
     // get_data(file[file_index_one-1], matrix_one);
-    get_data(file[0], matrix_one);
+    get_data(file[4], matrix_one);
+    std::cout << "One:" << std::endl;
     print_matrix(matrix_one);
 
     std::vector <std::vector<int>> matrix_two {};
-    get_data(file[1], matrix_two);
+    get_data(file[5], matrix_two);
+    std::cout << "Two:" << std::endl;
     print_matrix(matrix_two);
 // --- Ввод матриц из файла конец
 
@@ -213,20 +232,39 @@ int main()
     std::vector <int> S_NC {};
     std::vector <int> S_JR {};
     std::vector <int> S_JC {};
+    std::vector <std::vector<int>> unpackage_matrix_sum {};
     if(!simple_sum_check)
     {
         sum_matrix(A_AN, A_NR, A_NC, A_JR, A_JC, B_AN, B_NR, B_NC, B_JR, B_JC, S_AN, S_NR, S_NC, S_JR, S_JC);
-        std::cout << "Matrix result: " << std::endl;
+        
+        std::cout << "Matrix sum result: " << std::endl;
         print_packed_matrix(S_AN, S_NR, S_NC, S_JR, S_JC);
+        
+        unpackage(unpackage_matrix_sum, S_AN, S_NR, S_NC, S_JR, S_JC);
+        print_matrix(unpackage_matrix_sum);
     }
-    
 // --- сумма упакованных матриц
 
-// --- распаковка матрицы
-    std::vector <std::vector<int>> unpackage_matrix {};
-    unpackage(unpackage_matrix, S_AN, S_NR, S_NC, S_JR, S_JC);
-    print_matrix(unpackage_matrix);
-// --- распаковка матрицы конец
+// --- умножение упакованных матриц
+    std::vector <int> M_AN {};
+    std::vector <int> M_NR {};
+    std::vector <int> M_NC {};
+    std::vector <int> M_JR {};
+    std::vector <int> M_JC {};
+    std::vector <std::vector<int>> unpackage_matrix_mul {};
+    if(!simple_mul_check)
+    {
+        mul_matrix(A_AN, A_NR, A_NC, A_JR, A_JC, B_AN, B_NR, B_NC, B_JR, B_JC, M_AN, M_NR, M_NC, M_JR, M_JC);
+        
+        std::cout << "Matrix mul result: " << std::endl;
+        print_packed_matrix(M_AN, M_NR, M_NC, M_JR, M_JC);
+        
+        unpackage(unpackage_matrix_mul, M_AN, M_NR, M_NC, M_JR, M_JC);
+        print_matrix(unpackage_matrix_mul);
+    }
+
+// --- умножение упакованных матриц конец
+
 
     return 0;
 }
@@ -331,6 +369,7 @@ void get_data(std::string file, std::vector <std::vector<int>>& matrix)
 */
 void print_matrix(std::vector <std::vector<int>>& matrix)
 {
+    if(matrix.size() == 0) return;
     for(int i = 0; i < matrix.size(); i++)
     {
         for(int j = 0; j < matrix.back().size(); j++)
@@ -496,6 +535,7 @@ void unpackage(std::vector <std::vector<int>>& matrix,
                 std::vector <int>& JR, 
                 std::vector <int>& JC)
 {
+    if(JR.size() == 0) return;
     // инициализация матрицы нулями
     for(int i = 0; i < JR.size(); i++)
     {
@@ -716,7 +756,7 @@ void get_data_by_index(int& data, int ii_index, int jj_index,
 
 /*
  in: A_AN, A_NR, A_NC, A_JR, A_JC, B_AN, B_NR, B_NC, B_JR, B_JC
- out: S_AN, S_NR, S_NC, S_JR, S_JC
+ out: AN, NR, NC, JR, JC
 */
 void sum_matrix(std::vector <int>& A_AN,
                 std::vector <int>& A_NR,
@@ -953,5 +993,180 @@ void sum_matrix(std::vector <int>& A_AN,
         }
     }
 }
+
+/*
+ in: A_AN, A_NR, A_NC, A_JR, A_JC, B_AN, B_NR, B_NC, B_JR, B_JC
+ out: AN, NR, NC, JR, JC
+*/
+void mul_matrix(std::vector <int>& A_AN,
+                std::vector <int>& A_NR,
+                std::vector <int>& A_NC,
+                std::vector <int>& A_JR,
+                std::vector <int>& A_JC,
+                std::vector <int>& B_AN,
+                std::vector <int>& B_NR,
+                std::vector <int>& B_NC,
+                std::vector <int>& B_JR,
+                std::vector <int>& B_JC,
+                std::vector <int>& AN,
+                std::vector <int>& NR,
+                std::vector <int>& NC,
+                std::vector <int>& JR,
+                std::vector <int>& JC)
+{
+    // инициализировали JR JC
+    for(int i = 0; i < A_JR.size(); i++)
+        JR.push_back(-1);
+    for(int i = 0; i < B_JC.size(); i++)
+        JC.push_back(-1);
+
+    int mul {0};
+    int data_one {0};
+    int data_two {0};
+    for(int i = 0; i < A_JR.size(); i++)  // a.JR
+    {
+        for(int j = 0; j < B_JC.size(); j++) // b.JC
+        {
+            for(int jj = 0; jj < A_JC.size(); jj++) // a.JC
+            {
+                get_data_by_index(data_one, i, jj, A_AN, A_NR, A_NC, A_JR, A_JC);
+                get_data_by_index(data_two, jj, j, B_AN, B_NR, B_NC, B_JR, B_JC);
+                mul+=data_one*data_two;
+            }
+            if(mul != 0) 
+            {
+                AN.push_back(mul);
+                if(JR[i] == -1) JR[i] = AN.size();
+                if(JC[j] == -1) JC[j] = AN.size();
+            }
+            mul = 0;
+        }
+    }
+    // инициализировали NR NC
+    for(int i = 0; i < AN.size(); i++)
+    {
+        NR.push_back(-1);
+        NC.push_back(-1);
+    }
+
+    // расчет NR NC
+    data_one = 0;
+    data_two = 0;
+    
+    int k {0}; //счетчик номеров элементов
+    bool flag_row {0}; // флаг последнего элемента в строке
+
+    int t {0}; // счетчик для NC
+    int count {0}; // расчет номера элемента
+    bool flag_column {0}; // флаг последнего элемента в столбце
+    bool check_count_element {0}; // выход из цикла при совпадении номеров элементов
+    for(int i = 0; i < JR.size(); i++)
+    {
+        for(int j = 0; j < JC.size(); j++)
+        {
+            // get_data_by_index(data_one, i, j, A_AN, A_NR, A_NC, A_JR, A_JC);
+            // get_data_by_index(data_two, i, j, B_AN, B_NR, B_NC, B_JR, B_JC);
+
+            for(int jj = 0; jj < A_JC.size(); jj++) // a.JC
+            {
+                get_data_by_index(data_one, i, jj, A_AN, A_NR, A_NC, A_JR, A_JC);
+                get_data_by_index(data_two, jj, j, B_AN, B_NR, B_NC, B_JR, B_JC);
+                mul+=data_one*data_two;
+            }
+            if(mul != 0)
+            {
+                // для строк
+                for(int n = j; n < JC.size(); n++)
+                {
+                    flag_row = 0;
+                    mul = 0;
+                    // get_data_by_index(data_one, i, n, A_AN, A_NR, A_NC, A_JR, A_JC);
+                    // get_data_by_index(data_two, i, n, B_AN, B_NR, B_NC, B_JR, B_JC);
+                    for(int jj = 0; jj < A_JC.size(); jj++) // a.JC
+                    {
+                        get_data_by_index(data_one, i, jj, A_AN, A_NR, A_NC, A_JR, A_JC);
+                        get_data_by_index(data_two, jj, n, B_AN, B_NR, B_NC, B_JR, B_JC);
+                        mul+=data_one*data_two;
+                    }
+                    if(mul != 0 && n>j) // идем по столбцам
+                    {
+                        NR[k] = k+2;
+                        // std::cout << NR[k] << " ";
+                        k++;
+                        flag_row = 1;
+                        
+                        break;
+                    } 
+                }
+                // если последний или единственный элемент в строке
+                if(flag_row == 0)
+                {
+                    NR[k] = JR[i];
+                    // std::cout << NR[k] << " ";
+                    k++;
+                }
+                // для столбцов
+                for(int m = i; m < JR.size(); m++)
+                {
+                    flag_column = 0;
+                    mul = 0;
+                    // get_data_by_index(data_one, m, j, A_AN, A_NR, A_NC, A_JR, A_JC);
+                    // get_data_by_index(data_two, m, j, B_AN, B_NR, B_NC, B_JR, B_JC);
+                    for(int jj = 0; jj < A_JC.size(); jj++) // a.JC
+                    {
+                        get_data_by_index(data_one, m, jj, A_AN, A_NR, A_NC, A_JR, A_JC);
+                        get_data_by_index(data_two, jj, j, B_AN, B_NR, B_NC, B_JR, B_JC);
+                        mul+=data_one*data_two;
+                    }
+                    if(mul != 0 && m>i) // идем по строкам
+                    {
+                        // счетчик элементов
+                        count = 0;
+                        check_count_element = 0;
+                        for(int ii = 0; ii < JR.size(); ii++)
+                        {
+                            for(int jj = 0; jj < JC.size(); jj++)
+                            {
+                                // get_data_by_index(data_one, ii, jj, A_AN, A_NR, A_NC, A_JR, A_JC);
+                                // get_data_by_index(data_two, ii, jj, B_AN, B_NR, B_NC, B_JR, B_JC);
+                                mul = 0;
+                                for(int jjj = 0; jjj < A_JC.size(); jjj++) // a.JC
+                                {
+                                    get_data_by_index(data_one, ii, jjj, A_AN, A_NR, A_NC, A_JR, A_JC);
+                                    get_data_by_index(data_two, jjj, jj, B_AN, B_NR, B_NC, B_JR, B_JC);
+                                    mul+=data_one*data_two;
+                                }
+                                if(mul != 0)
+                                {
+                                    count++;
+                                }
+                                if(m == ii && j == jj)
+                                {
+                                    check_count_element = 1;
+                                    break;
+                                } 
+                            }
+                            if(check_count_element == 1) break;
+                        }
+                        
+                        if(NC[t] == -1) NC[t] = count;
+                        t++;
+                        flag_column = 1;
+                        break; // заполняется только нижележащий столбец
+                    }
+                }
+                // если последний или единственный элемент в столбце
+                if(flag_column == 0)
+                {
+                    if(NC[t] == -1) NC[t] = JC[j];
+                    t++;
+                }
+            }
+        }
+    }
+}
+
+
+
 
 
