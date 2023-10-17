@@ -133,15 +133,17 @@ int main()
     //     }
     //     if(file_index_one>0 && file_index_one<5 && file_index_two>0 && file_index_two<5) break;
     // }
+    int file_number_one = 4;
+    int file_number_two = 5;
 // --- Ввод матриц из файла
     std::vector <std::vector<int>> matrix_one {};
     // get_data(file[file_index_one-1], matrix_one);
-    get_data(file[4], matrix_one);
+    get_data(file[file_number_one], matrix_one);
     std::cout << "One:" << std::endl;
     print_matrix(matrix_one);
 
     std::vector <std::vector<int>> matrix_two {};
-    get_data(file[5], matrix_two);
+    get_data(file[file_number_two], matrix_two);
     std::cout << "Two:" << std::endl;
     print_matrix(matrix_two);
 // --- Ввод матриц из файла конец
