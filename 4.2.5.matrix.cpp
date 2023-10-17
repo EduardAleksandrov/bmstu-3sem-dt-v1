@@ -727,6 +727,7 @@ void sum_matrix(std::vector <int>& A_AN,
     for(int i = 0; i < A_JC.size(); i++)
         JC.push_back(-1);
 
+    // расчет AN, JR, JC
     int t_one {0}; // индекс в A_AN
     int t_two {0}; // индекс в B_AN
     int i_A, j_A;
@@ -805,6 +806,105 @@ void sum_matrix(std::vector <int>& A_AN,
             t_two++;
         }
     }
+    // расчет AN, JR, JC конец
+
+    // инициализировали NR NC
+    for(int i = 0; i < AN.size(); i++)
+    {
+        NR.push_back(-1);
+        NC.push_back(-1);
+    }
+    
+    // расчет NR NC
+    int data_one {0};
+    int data_two {0};
+    
+    int k {0}; //счетчик номеров элементов
+    bool flag_row {0}; // флаг последнего элемента в строке
+
+    int t {0}; // счетчик для NC
+    int count {0}; // расчет номера элемента
+    bool flag_column {0}; // флаг последнего элемента в столбце
+    bool check_count_element {0}; // выход из цикла при совпадении номеров элементов
+    for(int i = 0; i < JR.size(); i++)
+    {
+        for(int j = 0; j < JC.size(); j++)
+        {
+            get_data_by_index(data_one, i, j, A_AN, A_NR, A_NC, A_JR, A_JC);
+            get_data_by_index(data_two, i, j, B_AN, B_NR, B_NC, B_JR, B_JC);
+            if(data_one + data_two != 0)
+            {
+                // для строк
+                for(int n = j; n < JC.size(); n++)
+                {
+                    flag_row = 0;
+                    get_data_by_index(data_one, i, n, A_AN, A_NR, A_NC, A_JR, A_JC);
+                    get_data_by_index(data_two, i, n, B_AN, B_NR, B_NC, B_JR, B_JC);
+                    if(data_one + data_two != 0 && n>j) // идем по столбцам
+                    {
+                        NR[k] = k+2;
+                        // std::cout << NR[k] << " ";
+                        k++;
+                        flag_row = 1;
+                        
+                        break;
+                    } 
+                }
+                // если последний или единственный элемент в строке
+                if(flag_row == 0)
+                {
+                    NR[k] = JR[i];
+                    // std::cout << NR[k] << " ";
+                    k++;
+                }
+                // для столбцов
+                for(int m = i; m < JR.size(); m++)
+                {
+                    flag_column = 0;
+                    get_data_by_index(data_one, m, j, A_AN, A_NR, A_NC, A_JR, A_JC);
+                    get_data_by_index(data_two, m, j, B_AN, B_NR, B_NC, B_JR, B_JC);
+                    if(data_one + data_two != 0 && m>i) // идем по строкам
+                    {
+                        // счетчик элементов
+                        count = 0;
+                        check_count_element = 0;
+                        for(int ii = 0; ii < JR.size(); ii++)
+                        {
+                            for(int jj = 0; jj < JC.size(); jj++)
+                            {
+                                get_data_by_index(data_one, ii, jj, A_AN, A_NR, A_NC, A_JR, A_JC);
+                                get_data_by_index(data_two, ii, jj, B_AN, B_NR, B_NC, B_JR, B_JC);
+                                if(data_one + data_two != 0)
+                                {
+                                    count++;
+                                }
+                                if(m == ii && j == jj)
+                                {
+                                    check_count_element = 1;
+                                    break;
+                                } 
+                            }
+                            if(check_count_element == 1) break;
+                        }
+                        
+                        if(NC[t] == -1) NC[t] = count;
+                        t++;
+                        flag_column = 1;
+                        break; // заполняется только нижележащий столбец
+                    }
+                }
+                // если последний или единственный элемент в столбце
+                if(flag_column == 0)
+                {
+                    if(NC[t] == -1) NC[t] = JC[j];
+                    t++;
+                }
+            }
+        }
+    }
+    
+    
+    
     print_packed_matrix(AN, NR, NC, JR, JC);
 
 
