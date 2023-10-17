@@ -261,6 +261,8 @@ int main()
         
         unpackage(unpackage_matrix_mul, M_AN, M_NR, M_NC, M_JR, M_JC);
         print_matrix(unpackage_matrix_mul);
+        print_matrix(simple_multi_matrix);
+
     }
 
 // --- умножение упакованных матриц конец
@@ -1086,7 +1088,7 @@ void mul_matrix(std::vector <int>& A_AN,
         {
             // get_data_by_index(data_one, i, j, A_AN, A_NR, A_NC, A_JR, A_JC);
             // get_data_by_index(data_two, i, j, B_AN, B_NR, B_NC, B_JR, B_JC);
-
+            mul = 0;
             for(int jj = 0; jj < A_JC.size(); jj++) // a.JC
             {
                 get_data_by_index(data_one, i, jj, A_AN, A_NR, A_NC, A_JR, A_JC);

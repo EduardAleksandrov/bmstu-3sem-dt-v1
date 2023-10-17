@@ -7,7 +7,8 @@
     Добавлены простое сложение и умножение 
     Вводим индекс i,j возвращаем число
     Сумма + учет нулевых матриц
-    Умножение + учет нулевых - работает
+    Умножение + учет нулевых
+    Проверка обычной суммы и распакованной матрицы - работает
 */
 
 
@@ -16,6 +17,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <cmath>
 
 // получение данных
 void get_data(std::string, std::vector <std::vector<int>>&);
@@ -91,7 +93,8 @@ void mul_matrix(std::vector <int>&,
                 std::vector <int>&,
                 std::vector <int>&,
                 std::vector <int>&);
-
+// сверка
+void check_matrix(std::vector <std::vector<int>>&, std::vector <std::vector<int>>&);
 
 int main()
 {
@@ -242,6 +245,9 @@ int main()
         
         unpackage(unpackage_matrix_sum, S_AN, S_NR, S_NC, S_JR, S_JC);
         print_matrix(unpackage_matrix_sum);
+
+        check_matrix(simple_sum_matrix, unpackage_matrix_sum);
+
     }
 // --- сумма упакованных матриц
 
@@ -261,6 +267,8 @@ int main()
         
         unpackage(unpackage_matrix_mul, M_AN, M_NR, M_NC, M_JR, M_JC);
         print_matrix(unpackage_matrix_mul);
+
+        check_matrix(simple_multi_matrix, unpackage_matrix_mul);
     }
 
 // --- умножение упакованных матриц конец
@@ -1072,6 +1080,7 @@ void mul_matrix(std::vector <int>& A_AN,
     // расчет NR NC
     data_one = 0;
     data_two = 0;
+
     
     int k {0}; //счетчик номеров элементов
     bool flag_row {0}; // флаг последнего элемента в строке
@@ -1086,8 +1095,8 @@ void mul_matrix(std::vector <int>& A_AN,
         {
             // get_data_by_index(data_one, i, j, A_AN, A_NR, A_NC, A_JR, A_JC);
             // get_data_by_index(data_two, i, j, B_AN, B_NR, B_NC, B_JR, B_JC);
-
-            for(int jj = 0; jj < A_JC.size(); jj++) // a.JC
+            mul = 0;
+            for(int jj = 0; jj < JC.size(); jj++) // a.JC
             {
                 get_data_by_index(data_one, i, jj, A_AN, A_NR, A_NC, A_JR, A_JC);
                 get_data_by_index(data_two, jj, j, B_AN, B_NR, B_NC, B_JR, B_JC);
@@ -1102,13 +1111,13 @@ void mul_matrix(std::vector <int>& A_AN,
                     mul = 0;
                     // get_data_by_index(data_one, i, n, A_AN, A_NR, A_NC, A_JR, A_JC);
                     // get_data_by_index(data_two, i, n, B_AN, B_NR, B_NC, B_JR, B_JC);
-                    for(int jj = 0; jj < A_JC.size(); jj++) // a.JC
+                    for(int jj = 0; jj < JC.size(); jj++) // a.JC
                     {
                         get_data_by_index(data_one, i, jj, A_AN, A_NR, A_NC, A_JR, A_JC);
                         get_data_by_index(data_two, jj, n, B_AN, B_NR, B_NC, B_JR, B_JC);
                         mul+=data_one*data_two;
                     }
-                    if(mul != 0 && n>j) // идем по столбцам
+                    if(mul != 0 && n > j) // идем по столбцам
                     {
                         NR[k] = k+2;
                         // std::cout << NR[k] << " ";
@@ -1132,7 +1141,7 @@ void mul_matrix(std::vector <int>& A_AN,
                     mul = 0;
                     // get_data_by_index(data_one, m, j, A_AN, A_NR, A_NC, A_JR, A_JC);
                     // get_data_by_index(data_two, m, j, B_AN, B_NR, B_NC, B_JR, B_JC);
-                    for(int jj = 0; jj < A_JC.size(); jj++) // a.JC
+                    for(int jj = 0; jj < JC.size(); jj++) // a.JC
                     {
                         get_data_by_index(data_one, m, jj, A_AN, A_NR, A_NC, A_JR, A_JC);
                         get_data_by_index(data_two, jj, j, B_AN, B_NR, B_NC, B_JR, B_JC);
@@ -1150,7 +1159,7 @@ void mul_matrix(std::vector <int>& A_AN,
                                 // get_data_by_index(data_one, ii, jj, A_AN, A_NR, A_NC, A_JR, A_JC);
                                 // get_data_by_index(data_two, ii, jj, B_AN, B_NR, B_NC, B_JR, B_JC);
                                 mul = 0;
-                                for(int jjj = 0; jjj < A_JC.size(); jjj++) // a.JC
+                                for(int jjj = 0; jjj < JC.size(); jjj++) // a.JC
                                 {
                                     get_data_by_index(data_one, ii, jjj, A_AN, A_NR, A_NC, A_JR, A_JC);
                                     get_data_by_index(data_two, jjj, jj, B_AN, B_NR, B_NC, B_JR, B_JC);
@@ -1186,6 +1195,33 @@ void mul_matrix(std::vector <int>& A_AN,
     }
 }
 
+/*
+ in: simple_sum_matrix, unpackage_matrix_sum
+ out: 
+*/
+void check_matrix(std::vector <std::vector<int>>& simple_sum_matrix, std::vector <std::vector<int>>& unpackage_matrix_sum)
+{
+    int n = simple_sum_matrix.size();
+    int m = simple_sum_matrix.back().size();
+    long int count {0};
+    std::vector <std::vector<int>> check_m {};
+    for(int i = 0; i < n; i++)
+    {
+        check_m.push_back(std::vector<int>());
+        for(int j = 0; j < m; j++)
+        {
+            if(simple_sum_matrix[i][j] - unpackage_matrix_sum[i][j] == 0)
+            {
+                count++;
+            }
+            check_m.back().push_back(simple_sum_matrix[i][j] - unpackage_matrix_sum[i][j]);
+        }
+    }
+
+    print_matrix(check_m);
+    if(count == n*m) std::cout << "Матрицы совпадают" << std::endl;
+    else std::cout << "Матрицы не совпадают" << std::endl;;
+}
 
 
 
