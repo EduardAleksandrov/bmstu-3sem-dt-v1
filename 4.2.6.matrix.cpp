@@ -313,7 +313,7 @@ void get_data(std::string file, std::vector <std::vector<int>>& matrix)
         }
         
     }
-    if(r < 2)
+    if(r < 1)
     {
         std::cout << "Проверьте строки в файле " << file << std::endl;
         exit(1);
