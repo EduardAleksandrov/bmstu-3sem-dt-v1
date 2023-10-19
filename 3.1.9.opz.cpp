@@ -493,6 +493,7 @@ int opzCalculation(double *stackDouble,
                         if(cleanOutputStringArray[i] == allOperators[4])
                         {
                             if(std::isnan(pow(a1, a2)) == 1) return 4;
+                            if(std::isinf(pow(a1, a2)) == 1) return 4;
                             count = pow(a1, a2);
                             checkStack = pushStack(count, stackBaseDouble, &stackPointerDouble, stacksizeDouble);
                             if(checkStack == 1) 
