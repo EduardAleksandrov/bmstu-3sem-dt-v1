@@ -70,3 +70,11 @@ run_4.2.6.matrix:
 	g++ -std=c++17 ./4.2.6.matrix.cpp -o ./build/4.2.6.matrix -g && ./build/4.2.6.matrix
 run_4.2.7.matrix:
 	g++ -std=c++17 ./4.2.7.matrix.cpp -o ./build/4.2.7.matrix -g && ./build/4.2.7.matrix
+
+
+run_6.1.1.graph:
+	g++ -std=c++17 ./6.1.1.graph.cpp -o ./build/6.1.1.graph -g && ./build/6.1.1.graph
+run_6.1.2.graph:
+	g++ -std=c++17 ./6.1.2.graph.cpp -o ./build/6.1.2.graph -g && ./build/6.1.2.graph
+run_6.2.1.graph:
+	g++ -std=c++17 ./6.2.1.graph.cpp -o ./build/6.2.1.graph -g && ./build/6.2.1.graph
