@@ -283,7 +283,7 @@ int main()
 
     while(true)
     {
-        // печать стека
+        // печать очереди на каждом шаге
         std::vector <Vertex> data_from_queue {};
         queue_vertex.getAllQueue(data_from_queue);
         for(int i = 0; i < data_from_queue.size(); i++)
@@ -300,7 +300,7 @@ int main()
         }
         std::cout << dropedValue.element << std::endl;
 
-        // заносим значение дочерних в стек
+        // заносим значение дочерних в очередь
         if(dropedValue.left != nullptr)
         {
             bool check_add {0};
@@ -332,6 +332,6 @@ int main()
 
     delete [] vertex_set;
     vertex_set = nullptr;
-    
+
     return 0;
 }

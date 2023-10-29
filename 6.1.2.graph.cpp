@@ -173,7 +173,13 @@ int main()
             if(matrix[r][j] == 1)
             {
                 col = j;
-                stack_vertex.pushStack(row_s[col]);
+                bool check_stack;
+                check_stack = stack_vertex.pushStack(row_s[col]);
+                if(check_stack == 1)
+                {
+                    std::cout << "Стек полон" << std::endl;
+                    exit(EXIT_FAILURE);
+                }
             }
             
         }
