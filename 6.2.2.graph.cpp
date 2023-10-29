@@ -1,19 +1,26 @@
 /*
     Task: обход графа в виде дерева с указателями (поиск в ширину)
     добавлена очередь
-
+    готово
 */
 #include <iostream>
 #include <string>
 #include <vector>
 
-class Queue 
+struct Vertex
+{
+    std::string element;
+    Vertex* left;
+    Vertex* right;
+};
+template <typename T>
+class Queue
 {
 private:
-    int *fpos, *lpos, *startPos, *endPosition;
+    T *fpos, *lpos, *startPos, *endPosition;
     int queue_size;
-    int addLastElement; //проверка, менялся ли последний элемент, 1-менялся, 0-не менялся
-    int exclude; //заменять последнее значения только один раз когда очередь не полна
+    bool addLastElement; //проверка, менялся ли последний элемент, 1-менялся, 0-не менялся
+    bool exclude; //заменять последнее значения только один раз когда очередь не полна
 public:
     Queue(int q_size): queue_size{q_size}
     {
@@ -25,7 +32,7 @@ public:
 
         try
         {
-            startPos = new int[queue_size];
+            startPos = new T[queue_size];
         }
         catch(const std::bad_alloc& e)
         {
@@ -37,8 +44,8 @@ public:
         fpos = startPos;
         lpos = startPos;
 
-        for(int i = 0; i < endPosition-startPos+1; i++)
-            *(startPos+i) = 0;
+        // for(int i = 0; i < endPosition-startPos+1; i++)
+        //     *(startPos+i) = 0;
         
         addLastElement = exclude = 0;
     }
@@ -47,7 +54,7 @@ public:
         delete [] startPos;
         startPos = nullptr;
     }
-    bool addElementToQueue(int value)
+    bool addElementToQueue(T value)
     {
 
         if((lpos != endPosition) && (startPos != fpos)) exclude = 0;
@@ -95,15 +102,15 @@ public:
         std::cout << "lpos=" << *lpos << ", индекс=" << y << std::endl;
         std::cout << std::endl;
     }
-    bool deleteElementFromQueue(int& dropedValue)
+    bool deleteElementFromQueue(T& dropedValue)
     {
         if(lpos == fpos)
         {
             // std::cout << "Очередь пуста" << std::endl;
             return 1;
         }
-        int dropedElement = *fpos;
-        *fpos = 0;
+        T dropedElement = *fpos;
+        // *fpos = 0;
 
         if(lpos+1 != fpos) addLastElement = 0;
 
@@ -129,7 +136,7 @@ public:
         dropedValue = dropedElement;
         return 0;
     }
-    void getAllQueue(std::vector<int>& all_queue)
+    void getAllQueue(std::vector<T>& all_queue)
     {
         if(fpos<lpos)
         {
@@ -176,78 +183,155 @@ public:
 
 int main()
 {
-    int value, chooseNumber, dropedValue;
+    Vertex *vertex_set;
+    int vertex_set_size {14};
+    try
+    {
+        vertex_set = new Vertex[vertex_set_size];
+    }
+    catch(const std::bad_alloc& e)
+    {
+        std::cerr << e.what() << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    
+
+    vertex_set[0].element = {"A"};
+    vertex_set[0].left = &vertex_set[1];
+    vertex_set[0].right = &vertex_set[2];
+
+    vertex_set[1].element = {"B"};
+    vertex_set[1].left = &vertex_set[3];
+    vertex_set[1].right = &vertex_set[4];
+
+    vertex_set[2].element = {"C"};
+    vertex_set[2].left = &vertex_set[5];
+    vertex_set[2].right = &vertex_set[6];
+
+    vertex_set[3].element = {"D"};
+    vertex_set[3].left = &vertex_set[7];
+    vertex_set[3].right = &vertex_set[8];
+
+    vertex_set[4].element = {"E"};
+    vertex_set[4].left = &vertex_set[9];
+    vertex_set[4].right = nullptr;
+
+    vertex_set[5].element = {"F"};
+    vertex_set[5].left = &vertex_set[10];
+    vertex_set[5].right = nullptr;
+
+    vertex_set[6].element = {"G"};
+    vertex_set[6].left = &vertex_set[11];
+    vertex_set[6].right = &vertex_set[12];
+
+    vertex_set[7].element = {"H"};
+    vertex_set[7].left = nullptr;
+    vertex_set[7].right = nullptr;
+
+    vertex_set[8].element = {"I"};
+    vertex_set[8].left = nullptr;
+    vertex_set[8].right = nullptr;
+
+    vertex_set[9].element = {"J"};
+    vertex_set[9].left = nullptr;
+    vertex_set[9].right = nullptr;
+
+    vertex_set[10].element = {"K"};
+    vertex_set[10].left = nullptr;
+    vertex_set[10].right = nullptr;
+
+    vertex_set[11].element = {"L"};
+    vertex_set[11].left = nullptr;
+    vertex_set[11].right = nullptr;
+
+    vertex_set[12].element = {"M"};
+    vertex_set[12].left = &vertex_set[13];
+    vertex_set[12].right = nullptr;
+
+    vertex_set[13].element = {"N"};
+    vertex_set[13].left = nullptr;
+    vertex_set[13].right = nullptr;
+
+    Queue <Vertex> queue_vertex {50};
+    std::vector <std::string> visited_vertex {};
     bool check;
 
-    Queue one {5};
+    std::string input_vertex {};
+    int v_number {0};
     for(;;)
     {
-        std::cout << "Выберете пункт" << std::endl;
-        std::cout << "1.Получение всех элементов очереди" << std::endl;
-        std::cout << "2.Проверка пустоты очереди" << std::endl;
-        std::cout << "3.Просмотр первого элемента в очереди" << std::endl;
-        std::cout << "4.Извлечение из очереди первого элемента" << std::endl;
-        std::cout << "5.Добавление элемента в очередь" << std::endl;
-        std::cout << "6.Печать очереди" << std::endl;
-        std::cout << "0.Завершение работы" << std::endl;
-        
-        std::cin >> chooseNumber;
-        if(chooseNumber == 0)
+        int br {0};
+        std::cout << "Введите заглавную букву с какой читаем" <<std::endl;
+        std::cin >> input_vertex;
+        for(int i = 0; i < vertex_set_size; i++)
         {
-            exit(0);
-        }
-        if(chooseNumber == 1)
-        {
-            std::vector<int> all_queue{};
-            one.getAllQueue(all_queue);
-            for(int i = 0; i < all_queue.size(); i++)
-                std::cout<< all_queue[i] << " ";
-            std::cout << std::endl;
-        }
-        if(chooseNumber == 2)
-        {
-            // emptynessQueue(fpos, lpos);
-        }
-        if(chooseNumber == 3)
-        {
-            // int firstElementInQueue;
-            // check = firstElementQueue(fpos, lpos, firstElementInQueue);
-            // if(check == 1)
-            // {
-            //     std::cout << "Очередь пуста" << std::endl;
-            //     continue;
-            // }
-            // int x = fpos - startPos;
-            // std::cout << "Первый элемент в очереди= " << firstElementInQueue << ", индекс= " << x << std::endl;
-
-
-        }
-        if(chooseNumber == 4)
-        {
-
-            check = one.deleteElementFromQueue(dropedValue);
-            if(check == 1)
+            if(vertex_set[i].element == input_vertex)
             {
-                std::cout << "Очередь пуста" << std::endl;
-                continue;
+                v_number = i;
+                br = 1;
+                break;
             }
-            std::cout << dropedValue << std::endl;
         }
-        if(chooseNumber == 5)
+        if(br == 1) 
         {
-            std::cout << "Введите: " << std::endl;
-            std::cin >> value;
-            check = one.addElementToQueue(value);
-            if(check == 1)
+            std::cout << std::endl;
+            break;
+        }
+        
+    }
+    queue_vertex.addElementToQueue(vertex_set[v_number]);
+
+    while(true)
+    {
+        // печать стека
+        std::vector <Vertex> data_from_queue {};
+        queue_vertex.getAllQueue(data_from_queue);
+        for(int i = 0; i < data_from_queue.size(); i++)
+            std::cout << data_from_queue[i].element << " ";
+        std::cout << std::endl;
+
+        // получение верхнего элемента
+        Vertex dropedValue;
+        check = queue_vertex.deleteElementFromQueue(dropedValue);
+        if(check == 1)
+        {
+            std::cout << "Очередь пуста" << std::endl;
+            break;
+        }
+        std::cout << dropedValue.element << std::endl;
+
+        // заносим значение дочерних в стек
+        if(dropedValue.left != nullptr)
+        {
+            bool check_add {0};
+            check_add = queue_vertex.addElementToQueue(*dropedValue.left);
+            if(check_add == 1)
             {
                 std::cout << "Очередь полна" << std::endl;
-                continue;
-            } 
+                exit(EXIT_FAILURE);
+            }
         }
-        if(chooseNumber == 6)
+        if(dropedValue.right != nullptr)
         {
-            one.printQueue();
+            bool check_add {0};
+            queue_vertex.addElementToQueue(*dropedValue.right);
+            if(check_add == 1)
+            {
+                std::cout << "Очередь полна" << std::endl;
+                exit(EXIT_FAILURE);
+            }
         }
+        visited_vertex.push_back(dropedValue.element);
+
     }
+    // печать списка посещенных вершин
+    for(int i = 0; i < visited_vertex.size(); i++)
+        std::cout << visited_vertex[i] << " ";
+    std::cout << std::endl;
+    
+
+    delete [] vertex_set;
+    vertex_set = nullptr;
+    
     return 0;
 }
