@@ -1,6 +1,7 @@
 /*
     Task: обход графа в виде дерева с указателями (поиск в ширину)
     добавлена очередь
+    тестовая
     готово
     fix queue
 */
@@ -94,13 +95,13 @@ public:
     {
         for(int i = 0; i<endPosition-startPos+1; i++)
         {
-            std::cout << *(startPos+i) << " ";
+            std::cout << (startPos+i)->element << " ";
         }
         std::cout << std::endl;
         int x = fpos - startPos;
         int y = lpos - startPos;
-        std::cout << "fpos=" << *fpos << ", индекс=" << x << std::endl;
-        std::cout << "lpos=" << *lpos << ", индекс=" << y << std::endl;
+        std::cout << "fpos=" << fpos->element << ", индекс=" << x << std::endl;
+        std::cout << "lpos=" << lpos->element << ", индекс=" << y << std::endl;
         std::cout << std::endl;
     }
     bool deleteElementFromQueue(T& dropedValue)
@@ -142,7 +143,7 @@ public:
         if(fpos<lpos)
         {
             if(fpos == startPos && lpos == endPosition)
-            {
+            {   
                 if(addLastElement == 1)
                 {
                     for(int i = 0; i<lpos-fpos+1; i++)
@@ -155,6 +156,7 @@ public:
                         all_queue.push_back(*(fpos+i));
                     }
                 }
+                
             } else {
                 for(int i = 0; i<lpos-fpos; i++)
                 {
@@ -261,7 +263,7 @@ int main()
     vertex_set[13].left = nullptr;
     vertex_set[13].right = nullptr;
 
-    Queue <Vertex> queue_vertex {50};
+    Queue <Vertex> queue_vertex {7};
     std::vector <std::string> visited_vertex {};
     bool check;
 
@@ -297,6 +299,8 @@ int main()
         queue_vertex.getAllQueue(data_from_queue);
         for(int i = 0; i < data_from_queue.size(); i++)
             std::cout << data_from_queue[i].element << " ";
+        std::cout << std::endl;
+        queue_vertex.printQueue();
         std::cout << std::endl;
 
         // получение верхнего элемента

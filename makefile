@@ -15,6 +15,8 @@ run2.1.2.queue:
 	g++ -std=c++17 ./2.1.2.queue.cpp -o ./build/2.1.2.queue -g && ./build/2.1.2.queue
 run2.1.3.queue:
 	g++ -std=c++17 ./2.1.3.queue.cpp -o ./build/2.1.3.queue -g && ./build/2.1.3.queue
+run2.1.4.queue:
+	g++ -std=c++17 ./2.1.4.queue.cpp -o ./build/2.1.4.queue -g && ./build/2.1.4.queue
 
 
 run2.2.stack:
@@ -80,3 +82,5 @@ run_6.2.1.graph:
 	g++ -std=c++17 ./6.2.1.graph.cpp -o ./build/6.2.1.graph -g && ./build/6.2.1.graph4
 run_6.2.2.graph:
 	g++ -std=c++17 ./6.2.2.graph.cpp -o ./build/6.2.2.graph -g && ./build/6.2.2.graph
+run_6.2.2.1.graph:
+	g++ -std=c++17 ./6.2.2.1.graph.cpp -o ./build/6.2.2.1.graph -g && ./build/6.2.2.1.graph
