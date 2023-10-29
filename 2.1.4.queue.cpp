@@ -167,12 +167,16 @@ bool addElementToQueue(int *fpos, int **lpos, int *startPos, int *endPosition, i
 {
 
     // if((*lpos != endPosition) && (startPos != fpos)) exclude = 0;
-    if(*lpos+1 != fpos) addLastElement = 0;
+    // if(*lpos+1 != fpos) addLastElement = 0;
 
     if((*lpos == endPosition) && (startPos != fpos))
     {
         *lpos = startPos;
-        *endPosition = value;
+        if(addLastElement == 0)
+        {
+            *endPosition = value;
+        }
+        addLastElement = 0;
     } else if((*lpos == endPosition) && (startPos == fpos))
     {
         if(addLastElement == 0) 
@@ -209,11 +213,12 @@ bool deleteElementFromQueue(int **fpos, int **lpos, int *startPos, int *endPosit
     int dropedElement = **fpos;
     **fpos = 0;
 
-    if(*lpos+1 != *fpos) addLastElement = 0;
+    // if(*lpos+1 != *fpos) addLastElement = 0;
 
     if((*lpos == endPosition) && (startPos == *fpos) && (addLastElement == 1))
     {
         *lpos = startPos;
+        addLastElement = 0;
     } else if((*lpos+1 == *fpos)) 
     {
         if(addLastElement == 1) // указатель не проедет дальше при следующем удалении, останется на месте
