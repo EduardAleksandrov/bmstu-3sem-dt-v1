@@ -1,7 +1,8 @@
 /*
     Task: обход графа в виде дерева через матрицу смежности (поиск в глубину)
-    готов
     шаблон класса
+    проверка перед добавлением элемента в очереди/стеке и списке посещенных вершин
+    готово
 */
 #include <iostream>
 #include <string>
@@ -150,8 +151,6 @@ int main()
             std::cout << "Стек пуст" << std::endl;
             break;
         }
-        
-        visited_vertex.push_back(upperElement);
 
         // расчет
         r = 0;
@@ -161,12 +160,37 @@ int main()
         }
 
         col = 0;
+        bool check_element {0};
         for(int j = matrix.back().size(); j >=r; j--)
         {
             if(matrix[r][j] == 1)
             {
                 col = j;
-                bool check_stack; // row_s[col]  проверяем в стеке и в списке посещенных вершин
+
+                // проверка элемента в списке посещенных
+                for(int i = 0; i< visited_vertex.size(); i++)
+                {
+                    if(visited_vertex[i] == row_s[col])
+                    {
+                        check_element = 1;
+                        break;
+                    }
+                }
+                if(check_element == 1) break;
+                // проверка элемента в стеке
+                std::vector<std::string> all_stack {};
+                stack_vertex.getAllStack(all_stack);
+                for(int i = 0; i< all_stack.size(); i++)
+                {
+                    if(all_stack[i] == row_s[col])
+                    {
+                        check_element = 1;
+                        break;
+                    }
+                }
+                if(check_element == 1) break;
+
+                bool check_stack;
                 check_stack = stack_vertex.pushStack(row_s[col]);
                 if(check_stack == 1)
                 {
@@ -176,6 +200,9 @@ int main()
             }
             
         }
+        // if(check_element == 1) continue;
+
+        visited_vertex.push_back(upperElement);
         
         // печать вытянутого элемента
         std::cout << "Элемент: " << upperElement << std::endl;

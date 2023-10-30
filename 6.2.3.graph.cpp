@@ -1,8 +1,9 @@
 /*
     Task: обход графа в виде дерева с указателями (поиск в ширину)
     добавлена очередь
-    готово
     fix queue
+    проверка перед добавлением элемента в очереди/стеке и списке посещенных вершин
+    готово
 */
 #include <iostream>
 #include <string>
@@ -234,7 +235,7 @@ int main()
 
     vertex_set[5].element = {"F"};
     vertex_set[5].left = &vertex_set[10];
-    vertex_set[5].right = nullptr;
+    vertex_set[5].right = nullptr; //&vertex_set[11]
 
     vertex_set[6].element = {"G"};
     vertex_set[6].left = &vertex_set[11];
@@ -307,27 +308,63 @@ int main()
             std::cout << "Очередь пуста" << std::endl;
             break;
         }
-
+        
         // заносим значение дочерних в очередь
+        bool check_element{0};
         if(dropedValue.left != nullptr)
         {
-            bool check_add {0};
-            check_add = queue_vertex.addElementToQueue(*dropedValue.left);
-            if(check_add == 1)
+            // проверка списка посещенных вершин
+            for(int i = 0; i < visited_vertex.size(); i++)
             {
-                std::cout << "Очередь полна" << std::endl;
-                exit(EXIT_FAILURE);
+                if(visited_vertex[i] == dropedValue.left->element) check_element = 1;
             }
+            // проверка очереди
+            std::vector <Vertex> data_from_queue {};
+            queue_vertex.getAllQueue(data_from_queue);
+            for(int i = 0; i < data_from_queue.size(); i++)
+            {
+                if(data_from_queue[i].element == dropedValue.left->element) check_element = 1;
+            }
+            
+            if(check_element == 0)
+            {
+                bool check_add {0};
+                check_add = queue_vertex.addElementToQueue(*dropedValue.left);
+                if(check_add == 1)
+                {
+                    std::cout << "Очередь полна" << std::endl;
+                    exit(EXIT_FAILURE);
+                }
+            }
+            
         }
+        check_element = 0;
         if(dropedValue.right != nullptr)
         {
-            bool check_add {0};
-            check_add = queue_vertex.addElementToQueue(*dropedValue.right);
-            if(check_add == 1)
+            // проверка списка посещенных вершин
+            for(int i = 0; i < visited_vertex.size(); i++)
             {
-                std::cout << "Очередь полна" << std::endl;
-                exit(EXIT_FAILURE);
+                if(visited_vertex[i] == dropedValue.right->element) check_element = 1;
             }
+            // проверка очереди
+            std::vector <Vertex> data_from_queue {};
+            queue_vertex.getAllQueue(data_from_queue);
+            for(int i = 0; i < data_from_queue.size(); i++)
+            {
+                if(data_from_queue[i].element == dropedValue.right->element) check_element = 1;
+            }
+            
+            if(check_element == 0)
+            {
+                bool check_add {0};
+                check_add = queue_vertex.addElementToQueue(*dropedValue.right);
+                if(check_add == 1)
+                {
+                    std::cout << "Очередь полна" << std::endl;
+                    exit(EXIT_FAILURE);
+                }
+            }
+            
         }
         visited_vertex.push_back(dropedValue.element);
 
