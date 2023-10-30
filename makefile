@@ -80,9 +80,13 @@ run_6.1.1.graph:
 	g++ -std=c++17 ./6.1.1.graph.cpp -o ./build/6.1.1.graph -g && ./build/6.1.1.graph
 run_6.1.2.graph:
 	g++ -std=c++17 ./6.1.2.graph.cpp -o ./build/6.1.2.graph -g && ./build/6.1.2.graph
+run_6.1.3.graph:
+	g++ -std=c++17 ./6.1.3.graph.cpp -o ./build/6.1.3.graph -g && ./build/6.1.3.graph
 run_6.2.1.graph:
 	g++ -std=c++17 ./6.2.1.graph.cpp -o ./build/6.2.1.graph -g && ./build/6.2.1.graph4
 run_6.2.2.graph:
 	g++ -std=c++17 ./6.2.2.graph.cpp -o ./build/6.2.2.graph -g && ./build/6.2.2.graph
 run_6.2.2.1.graph:
 	g++ -std=c++17 ./6.2.2.1.graph.cpp -o ./build/6.2.2.1.graph -g && ./build/6.2.2.1.graph
+run_6.2.3.graph:
+	g++ -std=c++17 ./6.2.3.graph.cpp -o ./build/6.2.3.graph -g && ./build/6.2.3.graph

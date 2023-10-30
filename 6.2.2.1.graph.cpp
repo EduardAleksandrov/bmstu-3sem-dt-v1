@@ -4,6 +4,7 @@
     тестовая
     готово
     fix queue
+    на удаление
 */
 #include <iostream>
 #include <string>
