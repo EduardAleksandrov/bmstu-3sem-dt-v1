@@ -76,6 +76,7 @@ public:
             {
                 *lpos = value;
                 addLastElement = 1;
+                return 0;
             }
                 
             // std::cout << "Очередь полна" << std::endl;
@@ -86,6 +87,7 @@ public:
             {
                 *lpos = value;
                 addLastElement = 1;
+                return 0;
             }
             // std::cout << "Очередь полна" << std::endl;
             return 1;
@@ -268,7 +270,7 @@ int main()
     vertex_set[13].left = nullptr;
     vertex_set[13].right = nullptr;
 
-    Queue <Vertex> queue_vertex {7};
+    Queue <Vertex> queue_vertex {6};
     std::vector <std::string> visited_vertex {};
     bool check;
 

@@ -75,6 +75,7 @@ public:
             {
                 *lpos = value;
                 addLastElement = 1;
+                return 0;
             }
                 
             // std::cout << "Очередь полна" << std::endl;
@@ -85,6 +86,7 @@ public:
             {
                 *lpos = value;
                 addLastElement = 1;
+                return 0;
             }
             // std::cout << "Очередь полна" << std::endl;
             return 1;

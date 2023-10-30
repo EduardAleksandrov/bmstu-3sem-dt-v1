@@ -17,6 +17,8 @@ run2.1.3.queue:
 	g++ -std=c++17 ./2.1.3.queue.cpp -o ./build/2.1.3.queue -g && ./build/2.1.3.queue
 run2.1.4.queue:
 	g++ -std=c++17 ./2.1.4.queue.cpp -o ./build/2.1.4.queue -g && ./build/2.1.4.queue
+run2.1.5.queue:
+	g++ -std=c++17 ./2.1.5.queue.cpp -o ./build/2.1.5.queue -g && ./build/2.1.5.queue
 
 
 run2.2.stack:
