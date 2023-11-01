@@ -127,6 +127,7 @@ int main()
     std::vector <int> all_s {};
     cities_stack.getAllStack(all_s);
     int ii, jj;
+    long int sum {0};
     for(int i = 0; i < all_s.size()-1; i++)
     {
         ii = all_s[i];
@@ -136,7 +137,9 @@ int main()
     short_ways.push_back(std::vector<int>());
         for(int i = 0; i < all_s.size(); i++)
             short_ways.back().push_back(all_s[i]);
+    short_way_count++;
 
+    
     while(true)
     {
 // работа со стеком и множеством
@@ -164,7 +167,7 @@ int main()
                 set_element = n;
             }
         }
-
+        //печать множества
         for (int n : cities_numbers_set)
             std::cout << n << " ";
         std::cout << std::endl;
@@ -180,6 +183,7 @@ int main()
         }
         cities_numbers_set.clear();
 
+        //печать стека
         std::vector <int> all_stack {};
         cities_stack.getAllStack(all_stack);
         for(int i = 0; i < all_stack.size(); i++)
@@ -190,11 +194,9 @@ int main()
 // --- end работа со стеком и множеством
 
 // расчет минимального пути и суммы
-        std::vector <int> all_s {};
+        all_s.clear();
         cities_stack.getAllStack(all_s);
-        // if(all_s.empty()) break;
-        int ii, jj;
-        long int sum {0};
+        sum = 0;
         for(int i = 0; i < all_s.size()-1; i++)
         {
             ii = all_s[i];
@@ -204,8 +206,12 @@ int main()
 
         if(sum <= sum_etalon)
         {
-            if(sum == sum_etalon) short_way_count++;
-            if(sum < sum_etalon) short_ways = {};
+            if(sum < sum_etalon)
+            {
+                short_way_count = 0;
+                short_ways.clear();
+            }
+            short_way_count++;
             short_ways.push_back(std::vector<int>());
             for(int i = 0; i < all_s.size(); i++)
                 short_ways.back().push_back(all_s[i]);
