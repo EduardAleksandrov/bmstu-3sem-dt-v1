@@ -109,11 +109,17 @@ int main()
 // --- end
 
     std::set<int> cities_numbers_set {};
-    Stack <int> cities_stack = Stack<int>(10);
+    Stack <int> cities_stack = Stack<int>(50);  // размер стека
 
+    bool check_stack;
     for(int i = 0; i < cities.size(); i++)
     {
-        cities_stack.pushStack(cities[i]);
+        check_stack = cities_stack.pushStack(cities[i]);
+        if(check_stack == 1)
+        {
+            std::cout << "Стек полон" << std::endl;
+            exit(EXIT_FAILURE);
+        }
     }
 
 // цикл while
@@ -174,12 +180,23 @@ int main()
 
         if(set_index == 0) continue;
 
-        cities_stack.pushStack(set_element);
+        bool check_stack;
+        check_stack = cities_stack.pushStack(set_element);
+        if(check_stack == 1)
+        {
+            std::cout << "Стек полон" << std::endl;
+            exit(EXIT_FAILURE);
+        }
         cities_numbers_set.erase(set_element);
 
         for (int n : cities_numbers_set)
         {
-            cities_stack.pushStack(n);
+            check_stack = cities_stack.pushStack(n);
+            if(check_stack == 1)
+            {
+                std::cout << "Стек полон" << std::endl;
+                exit(EXIT_FAILURE);
+            }
         }
         cities_numbers_set.clear();
 
