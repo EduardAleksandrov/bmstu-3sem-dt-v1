@@ -97,3 +97,6 @@ run_6.2.2.1.graph:
 	g++ -std=c++17 ./6.2.2.1.graph.cpp -o ./build/6.2.2.1.graph -g && ./build/6.2.2.1.graph
 run_6.2.3.graph:
 	g++ -std=c++17 ./6.2.3.graph.cpp -o ./build/6.2.3.graph -g && ./build/6.2.3.graph
+
+run_7.1.1.haffman:
+	g++ -std=c++17 ./7.1.1.haffman.cpp -o ./build/7.1.1.haffman -g && ./build/7.1.1.haffman
