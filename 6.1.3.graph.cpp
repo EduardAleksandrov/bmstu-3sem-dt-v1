@@ -168,6 +168,7 @@ int main()
                 col = j;
 
                 // проверка элемента в списке посещенных
+                check_element = 0;
                 for(int i = 0; i< visited_vertex.size(); i++)
                 {
                     if(visited_vertex[i] == row_s[col])
@@ -176,8 +177,9 @@ int main()
                         break;
                     }
                 }
-                if(check_element == 1) break;
+                if(check_element == 1) continue;
                 // проверка элемента в стеке
+                check_element = 0;
                 std::vector<std::string> all_stack {};
                 stack_vertex.getAllStack(all_stack);
                 for(int i = 0; i< all_stack.size(); i++)
@@ -188,8 +190,7 @@ int main()
                         break;
                     }
                 }
-                if(check_element == 1) break;
-
+                if(check_element == 1) continue;
                 bool check_stack;
                 check_stack = stack_vertex.pushStack(row_s[col]);
                 if(check_stack == 1)
