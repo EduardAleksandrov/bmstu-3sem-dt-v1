@@ -1,9 +1,16 @@
+/*
+    Подготовка
+*/
 #include <iostream>
 #include <bitset>
 #include <string>
 #include <fstream>
 #include <iterator>
-    
+#include <locale>
+
+// #include <io.h>                      // для функции _setmode
+// #include <fcntl.h>                   // для константы _O_U16TEXT
+
 struct Student
 {
     std::string name;

@@ -100,3 +100,5 @@ run_6.2.3.graph:
 
 run_7.1.1.haffman:
 	g++ -std=c++17 ./7.1.1.haffman.cpp -o ./build/7.1.1.haffman -g && ./build/7.1.1.haffman
+run_7.1.2.haffman:
+	g++ -std=c++17 ./7.1.2.haffman.cpp -o ./build/7.1.2.haffman -g && ./build/7.1.2.haffman
