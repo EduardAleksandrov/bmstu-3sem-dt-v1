@@ -300,6 +300,24 @@ int main()
     // std::wcout << first_el_int << std::endl;
     /// ---
 
+    // подсчет байтов из битов
+    std::fstream wff_bits("7.2.5.bits.dat", std::ios::in | std::ios::binary);
+    if(!wff_bits) {
+        std::wcout << "Cannot open file!" << std::endl;
+        return 1;
+    }
+    wff_bits.seekp(file_seekp_pointer_get, std::ios::beg);
+    int32_t num_of_bites{0};
+    char count_bites;
+
+    while(wff_bits.read((char *) &count_bites, 1))
+    {
+        num_of_bites++;
+    }
+    std::wcout<<num_of_bites<<"\n";
+    wff_bits.close();
+    // --- end подсчет байтов из битов
+
     std::fstream wff("7.2.5.bits.dat", std::ios::in | std::ios::binary);
     if(!wff) {
         std::wcout << "Cannot open file!" << std::endl;
