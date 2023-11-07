@@ -8,7 +8,7 @@
     второй сегмент добавлен
     запись в файл готова
     чтение символов для таблицы готово
-    нужно распаковать бинарные данные - не готово
+    нужно распаковать бинарные данные - готово
 
 */
 #include <iostream>
@@ -275,9 +275,13 @@ int main()
     out_file_wchar.close();
 
     std::wcout << std::endl;
-    for(int i = 0; i < new_table.size(); i++)
-        std::wcout << new_table[i].index << " " << new_table[i].node_label << " " << new_table[i].node_weight << std::endl;
+    
+    // собрали таблицу
+    get_full_table(new_table);
 
+    for(int i = 0; i < table.size(); i++)
+        std::wcout << new_table[i].index << " " << new_table[i].node_label << " " << new_table[i].node_weight << " " << new_table[i].union_flag << " " << new_table[i].left_index << " " << new_table[i].right_index << std::endl;
+    // --- end собрали таблицу
 // ---
 
 
@@ -314,8 +318,9 @@ int main()
     {
         num_of_bites++;
     }
-    std::wcout<<num_of_bites<<"\n";
     wff_bits.close();
+    num_of_bites--; // первый байт - количество бит в последнем байте
+    std::wcout<<L"Количество байт в бит коде: "<<num_of_bites<<"\n";
     // --- end подсчет байтов из битов
 
     std::fstream wff("7.2.5.bits.dat", std::ios::in | std::ios::binary);
@@ -330,39 +335,65 @@ int main()
     char upper_read_seg_two;
     wff.read((char *) &upper_read_seg_two, 1);
     int segment_two_tt = (int)segment_two;
+    std::wcout <<L"Количество бит в последнем байте:";
     std::wcout << segment_two_tt << std::endl;
     //---
 
+    int32_t count_of_bites{0};
+    int num_of_bits_in_bite {0};
+    int32_t ind_bite = new_table[new_table.size()-1].index;
+    // std::wcout << ind_bite << "\n";
     while(wff.read((char *) &upper_read, 1))
-    // for(int i = 0; i < 9; i++)
     {
-        // wff.read((char *) &upper_read, 1);
-        // if(upper_read == EOF) break;
-        for(int i = 0; i < 8 ; i++)
+        tmp.binary_number.clear();
+        count_of_bites++;
+        if(count_of_bites == num_of_bites)
+        {
+            num_of_bits_in_bite = segment_two_tt;
+        } else {
+            num_of_bits_in_bite = 8;
+        }
+        for(int i = 0; i < num_of_bits_in_bite ; i++)
         {
             tmp.binary_number.push_back(upper_read[kk--]);
             if(kk < 0) kk = 7;
         }
+        // for(int j=0;j < tmp.binary_number.size(); j++)
+        // {
+        //     std::wcout << tmp.binary_number[j];
+        // }
+        // std::wcout << std::endl;
+        
+        // вычисление символов из байт кода и печать их
+        for(int i = 0; i < tmp.binary_number.size(); i++)
+        {
+            if(tmp.binary_number[i] == 0)
+            {
+                ind_bite = new_table[ind_bite-1].left_index;
+            }
+            if(tmp.binary_number[i] == 1)
+            {
+                ind_bite = new_table[ind_bite-1].right_index;
+            }
+            if(ind_bite>=1 && ind_bite<=first_element_int)
+            {
+                std::wcout << new_table[ind_bite-1].node_label;
+                ind_bite = new_table[new_table.size()-1].index;
+            }
+        }
     }
     wff.close();
-
-    for(int j=0;j < tmp.binary_number.size(); j++)
-    {
-        std::wcout << tmp.binary_number[j];
-    }
     std::wcout << std::endl;
+
+    // for(int j=0;j < tmp.binary_number.size(); j++)
+    // {
+    //     std::wcout << tmp.binary_number[j];
+    // }
+    // std::wcout << std::endl;
 
     // std::wcout << segment_two << " "<< br<< std::endl;
 
 // --- end чтение бинарных данных
-
-
-
-
-
-
-
-
 
 
 
