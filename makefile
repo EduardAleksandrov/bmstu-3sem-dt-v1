@@ -118,3 +118,5 @@ run_7.2.6.haffman:
 	g++ -std=c++17 ./7.2.6.haffman.cpp -o ./build/7.2.6.haffman -g && ./build/7.2.6.haffman
 run_7.2.7.haffman:
 	g++ -std=c++17 ./7.2.7.haffman.cpp -o ./build/7.2.7.haffman -g && ./build/7.2.7.haffman
+run_7.2.8.haffman:
+	g++ -std=c++17 ./7.2.8.haffman.cpp -o ./build/7.2.8.haffman -g && ./build/7.2.8.haffman
