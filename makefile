@@ -104,6 +104,8 @@ run_7.1.2.haffman:
 	g++ -std=c++17 ./7.1.2.haffman.cpp -o ./build/7.1.2.haffman -g && ./build/7.1.2.haffman
 run_7.1.3.haffman:
 	g++ -std=c++17 ./7.1.3.haffman.cpp -o ./build/7.1.3.haffman -g && ./build/7.1.3.haffman
+run_7.1.4.haffman:
+	g++ -std=c++17 ./7.1.4.haffman.cpp -o ./build/7.1.4.haffman -g && ./build/7.1.4.haffman
 run_7.2.1.haffman:
 	g++ -std=c++17 ./7.2.1.haffman.cpp -o ./build/7.2.1.haffman -g && ./build/7.2.1.haffman
 run_7.2.2.haffman:
@@ -120,3 +122,5 @@ run_7.2.7.haffman:
 	g++ -std=c++17 ./7.2.7.haffman.cpp -o ./build/7.2.7.haffman -g && ./build/7.2.7.haffman
 run_7.2.8.haffman:
 	g++ -std=c++17 ./7.2.8.haffman.cpp -o ./build/7.2.8.haffman -g && ./build/7.2.8.haffman
+run_7.2.9.haffman:
+	g++ -std=c++17 ./7.2.9.haffman.cpp -o ./build/7.2.9.haffman -g && ./build/7.2.9.haffman
