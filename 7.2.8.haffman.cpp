@@ -9,6 +9,7 @@
     запись в файл готова
     чтение символов для таблицы готово
     нужно распаковать бинарные данные - готово
+    fix - готово
 
 */
 #include <iostream>
@@ -169,7 +170,6 @@ int main()
         // std::wcout << (int)sizeof(wchar_t) << " ";
     }
     in_file_wchar.close();
-    int32_t file_seekp_pointer_set = in_file_wchar.tellg();
 
 // --- end запись в файл wchar
 
@@ -194,8 +194,6 @@ int main()
     //  запись нуля во второй сегмент
     int num_zero {0};
     char vOut_zero = (char)num_zero;
-    // int32_t file_seekp_pointer_set = in_file_wchar.tellg();
-    // std::wcout << in_file_wchar.tellg() << " fwefw"<< "\n";
     wf.write(&vOut_zero, 1);
     // ---
 
@@ -230,7 +228,7 @@ int main()
     wf.write(reinterpret_cast<char*>(&bits), 1);
     // ---
 
-    wf.seekp(file_seekp_pointer_set, std::ios::beg);
+    wf.seekp(-1, std::ios::beg);
     char segment_two_t = (char)segment_two;
     wf.write(&segment_two_t, 1);
 
