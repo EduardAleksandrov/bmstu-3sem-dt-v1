@@ -256,6 +256,8 @@ double compute_func(double a,
                     std::vector <std::vector<int>>& matrix,
                     std::vector <int>& way)
 {
+    srand(time(NULL));
+
     std::vector <int> cities {};
     for(int i = 0; i < matrix.size(); i++)
     {
@@ -307,7 +309,7 @@ double compute_func(double a,
     // цикл по суткам
     std::vector <int> cities_k_ant{};
     double Lk {0};
-    std::vector <double> ver_perehoda{};
+    std::vector <double> ver_perehoda{}; //вероятность перехода
     for(int i = 1; i <= tmax; i++) // цикл по суткам
     {
         for(int k = 1; k <= cities.size(); k++) // цикл по муравьям
@@ -315,8 +317,11 @@ double compute_func(double a,
             cities_k_ant.clear();
             Lk = 0;
             cities_k_ant.push_back(k);
+            // cities_k_ant.push_back(2);
+            // cities_k_ant.push_back(3);
             
-            while(true) // проход пути одним муравьем
+            int counter {0};
+            while(cities_k_ant.size() != cities.size()) // проход пути одним муравьем
             {
                 ver_perehoda.clear();
                 for(int j = 1; j <=cities.size(); j++) // вероятность перехода в след город
@@ -333,30 +338,67 @@ double compute_func(double a,
                     }
                     if(check_cities == 1) continue;
                     // std::cout<<matrix[cities_k_ant[cities_k_ant.size()-1]][j-1] << " ";
-                    double one, two;
+                    double one{0}, two{0};
                     if(cities_k_ant[cities_k_ant.size()-1] != j)
                     {
-                        one = pow(1.0/matrix[cities_k_ant[cities_k_ant.size()-1]-1][j-1],a);
+                        one = pow(1.0/matrix[cities_k_ant[cities_k_ant.size()-1]-1][j-1],a); // последний посещенный город i- текущий город j
                         two = pow(feromon_m[cities_k_ant[cities_k_ant.size()-1]-1][j-1],b);
+                        std::cout << 2 <<"\n";
                     }
-                    double sumq {};
+                    double sumq {0};
                     for(int q = 1; q<=cities.size(); q++)
                     {
-                        for(int n = 0; n < cities_k_ant.size(); n++)
+                        if(cities_k_ant[cities_k_ant.size()-1] != q)
                         {
-                            if(cities_k_ant[n] != q && cities_k_ant[cities_k_ant.size()-1] != q)
+                            for(int n = 0; n < cities_k_ant.size(); n++)
                             {
-                                sumq+= pow(1.0/matrix[cities_k_ant[cities_k_ant.size()-1]-1][q-1],a) * pow(feromon_m[cities_k_ant[cities_k_ant.size()-1]-1][q-1],b);
+                                if(cities_k_ant[n] != q )
+                                {
+                                    sumq+= pow(1.0/matrix[cities_k_ant[cities_k_ant.size()-1]-1][q-1],a) * pow(feromon_m[cities_k_ant[cities_k_ant.size()-1]-1][q-1],b);
+                                    // std::cout << 1;
+                                }
                             }
                         }
+                        
                     }
+                    // std::cout << "\n";
+                    // std::cout << one << " "<< two << " " <<sumq << "\n";
                     ver_perehoda.push_back(one*two/sumq);
                 
                 }
+                // получить случайное число
+                double rand_value;
+                int precision {6};
+                double min {0.00001};
+                double max {0.99999};
+                rand_value = rand() % (int)pow(10, precision); // получить случайное число как целое число с порядком precision
+                rand_value = min + (rand_value / pow(10, precision)) * (max - min); // получить вещественное число
+                std::cout<< rand_value <<"\n";
+                // ---
+
+                double sum_veroyt {0};
+                int next_point {0};
+                for(int i = 0; i<ver_perehoda.size(); i++)
+                {
+                    sum_veroyt+=ver_perehoda[i];
+                    if(sum_veroyt <= rand_value && ver_perehoda[i] != 0)
+                    {
+                        next_point = i+1;
+                    }
+                }
+                if(next_point == 0) next_point = 1;
+                cities_k_ant.push_back(next_point);
+
+
+
                 for(int i = 0; i<ver_perehoda.size();i++)
                         std::cout<<ver_perehoda[i] << " ";
                     std::cout << std::endl;
-                exit(0);
+                double summ {0};
+                for(int i = 0; i<ver_perehoda.size();i++)
+                    summ += ver_perehoda[i];
+                std::cout << "сумма вероятностей " << summ <<std::endl;
+                // if(counter++ == 2) exit(1);
             }
             
         }
