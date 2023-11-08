@@ -1,6 +1,6 @@
 /*
     Task: Коммивояжер - метод муравьиного алгоритма
-    расчет вероятности перехода
+    расчет вероятности перехода равен единице - работает
 */
 #include <iostream>
 #include <string>
@@ -317,8 +317,6 @@ double compute_func(double a,
             cities_k_ant.clear();
             Lk = 0;
             cities_k_ant.push_back(k);
-            // cities_k_ant.push_back(2);
-            // cities_k_ant.push_back(3);
             
             int counter {0};
             while(cities_k_ant.size() != cities.size()) // проход пути одним муравьем
@@ -337,31 +335,15 @@ double compute_func(double a,
                         }
                     }
                     if(check_cities == 1) continue;
-                    // std::cout<<matrix[cities_k_ant[cities_k_ant.size()-1]][j-1] << " ";
+                    
                     double one{0}, two{0};
                     if(cities_k_ant[cities_k_ant.size()-1] != j)
                     {
                         one = pow(1.0/matrix[cities_k_ant[cities_k_ant.size()-1]-1][j-1],a); // последний посещенный город i- текущий город j
                         two = pow(feromon_m[cities_k_ant[cities_k_ant.size()-1]-1][j-1],b);
-                        std::cout << 2 <<"\n";
+                        // std::cout << 2 <<"\n";
                     }
                     double sumq {0};
-                    // for(int q = 1; q<=cities.size(); q++)
-                    // {
-                    //     if(cities_k_ant[cities_k_ant.size()-1] != q)
-                    //     {
-                    //         for(int n = 0; n < cities_k_ant.size(); n++)
-                    //         {
-                    //             if(cities_k_ant[n] != q )
-                    //             {
-                    //                 sumq+= pow(1.0/matrix[cities_k_ant[cities_k_ant.size()-1]-1][q-1],a) * pow(feromon_m[cities_k_ant[cities_k_ant.size()-1]-1][q-1],b);
-                    //                 std::cout << q <<"\n";
-                    //             }
-                                
-                    //         }
-                    //     }
-                    // }
-                    
                     std::vector <bool> visited_city{};
                     for(int j = 0; j<cities.size(); j++)
                     {
@@ -376,8 +358,8 @@ double compute_func(double a,
                         if(visited_city[i] == 1) visited_city[i]=0;
                         else visited_city[i]=1;
                     }
-                    for(int i = 0; i<visited_city.size(); i++)
-                        std::cout << visited_city[i] << " ";
+                    // for(int i = 0; i<visited_city.size(); i++)
+                    //     std::cout << visited_city[i] << " ";
 
                     for(int q = 0; q<cities.size(); q++)
                     {
@@ -388,13 +370,10 @@ double compute_func(double a,
                         }
                     }
                     
-                    std::cout << std::endl;
-
-                    // std::cout << "\n";
-                    // std::cout << one << " "<< two << " " <<sumq << "\n";
                     ver_perehoda.push_back(one*two/sumq);
-                
                 }
+                std::cout << std::endl;
+
                 // получить случайное число
                 double rand_value;
                 int precision {6};
@@ -404,22 +383,28 @@ double compute_func(double a,
                 rand_value = min + (rand_value / pow(10, precision)) * (max - min); // получить вещественное число
                 std::cout<< rand_value <<"\n";
                 // ---
-
+                // расчет следующего города через вероятность перехода и случайное число
                 double sum_veroyt {0};
                 int next_point {0};
                 for(int i = 0; i<ver_perehoda.size(); i++)
                 {
                     sum_veroyt+=ver_perehoda[i];
-                    if(sum_veroyt <= rand_value && ver_perehoda[i] != 0)
+                    if(sum_veroyt >= rand_value && ver_perehoda[i] != 0)
                     {
                         next_point = i+1;
+                        break;
                     }
                 }
-                if(next_point == 0) next_point = 1;
+                if(next_point == 0) 
+                {
+                    for(int i = 0; i< ver_perehoda.size(); i++)
+                        if(ver_perehoda[i] != 0) next_point = i+1;
+                }
+                
                 cities_k_ant.push_back(next_point);
-
-
-
+                //---
+                
+                //печать
                 for(int i = 0; i<ver_perehoda.size();i++)
                         std::cout<<ver_perehoda[i] << " ";
                     std::cout << std::endl;
@@ -427,6 +412,7 @@ double compute_func(double a,
                 for(int i = 0; i<ver_perehoda.size();i++)
                     summ += ver_perehoda[i];
                 std::cout << "сумма вероятностей " << summ <<std::endl;
+                std::cout << "k_ant_size " << cities_k_ant.size() <<std::endl;
                 // if(counter++ == 2) exit(1);
             }
             
