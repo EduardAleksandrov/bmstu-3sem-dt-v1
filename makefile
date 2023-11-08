@@ -75,6 +75,8 @@ run_4.2.6.matrix:
 run_4.2.7.matrix:
 	g++ -std=c++17 ./4.2.7.matrix.cpp -o ./build/4.2.7.matrix -g && ./build/4.2.7.matrix
 
+run_5.1.1.komi:
+	g++ -std=c++17 ./5.1.1.komi.cpp -o ./build/5.1.1.komi -g && ./build/5.1.1.komi
 run_5.2.1.komi:
 	g++ -std=c++17 ./5.2.1.komi.cpp -o ./build/5.2.1.komi -g && ./build/5.2.1.komi
 run_5.2.2.komi:
