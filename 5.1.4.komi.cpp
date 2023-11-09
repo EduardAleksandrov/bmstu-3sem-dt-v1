@@ -3,7 +3,7 @@
     расчет вероятности перехода равен единице - работает
     сохранение путей и вычисление минимального - работает
     матрица феромона - работает
-    построение таблицы  - не готово
+    построение таблицы  - готово
 */
 #include <iostream>
 #include <string>
@@ -58,9 +58,9 @@ int main()
     int file_number_one = 0;
     int file_number_two = 1;
     int file_number_three = 2;
-    std::vector <std::vector<int>> matrix_1 {};
-    std::vector <std::vector<int>> matrix_2 {};
-    std::vector <std::vector<int>> matrix_3 {};
+    std::vector <std::vector<int>> matrix_1 {}; // Lэ = 14
+    std::vector <std::vector<int>> matrix_2 {}; // Lэ = 14
+    std::vector <std::vector<int>> matrix_3 {}; // Lэ = 16
     get_data(file[file_number_one], matrix_1);
     if(matrix_1.size() != matrix_1.back().size())
     {
@@ -89,7 +89,7 @@ int main()
     double Lbest {0};
     std::vector <int> way {};
 
-    std::cout << "a" <<"\t"<< "q" << "\t" << "tmax" << "\t" << "Lbest" << std::endl;
+    std::cout << "a" <<"\t"<< "q" << "\t" << "tmax" << "\t" << "Lbest" << "\t"<<"Lbest - Lэ"<< std::endl;
 
     for(int i = 0; i < tmax.size(); i++)
     {
@@ -99,10 +99,43 @@ int main()
             {
                 Lbest = compute_func(a[j], g[n], tmax[i], matrix_1, way);
 
-                std::cout << a[j] <<"\t"<< g[n] << "\t" << tmax[i] << "\t" << Lbest << std::endl;
+                std::cout << a[j] <<"\t"<< g[n] << "\t" << tmax[i] << "\t" << Lbest << "\t" << Lbest-14 << std::endl;
             }
         }
     }
+
+    std::cout << std::endl;
+    std::cout << "a" <<"\t"<< "q" << "\t" << "tmax" << "\t" << "Lbest" << "\t"<<"Lbest - Lэ"<< std::endl;
+
+    for(int i = 0; i < tmax.size(); i++)
+    {
+        for(int j = 0; j < a.size(); j++)
+        {
+            for(int n = 0; n < g.size(); n++)
+            {
+                Lbest = compute_func(a[j], g[n], tmax[i], matrix_2, way);
+
+                std::cout << a[j] <<"\t"<< g[n] << "\t" << tmax[i] << "\t" << Lbest << "\t" << Lbest-14 << std::endl;
+            }
+        }
+    }
+    
+    std::cout << std::endl;
+    std::cout << "a" <<"\t"<< "q" << "\t" << "tmax" << "\t" << "Lbest" << "\t"<<"Lbest - Lэ"<< std::endl;
+
+    for(int i = 0; i < tmax.size(); i++)
+    {
+        for(int j = 0; j < a.size(); j++)
+        {
+            for(int n = 0; n < g.size(); n++)
+            {
+                Lbest = compute_func(a[j], g[n], tmax[i], matrix_3, way);
+
+                std::cout << a[j] <<"\t"<< g[n] << "\t" << tmax[i] << "\t" << Lbest << "\t" << Lbest-16 << std::endl;
+            }
+        }
+    }
+
 
 
 
