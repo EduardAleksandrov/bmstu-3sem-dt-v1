@@ -2,6 +2,7 @@
     Task: Коммивояжер - метод муравьиного алгоритма
     расчет вероятности перехода равен единице - работает
     сохранение путей и вычисление минимального - работает
+    матрица феромона - работает
 */
 #include <iostream>
 #include <string>
@@ -392,10 +393,60 @@ double compute_func(double a,
         std::cout << "\n";
         std::cout << Lbest << "\n";
 
+    //расчет феромона
+        // испарение
+        for(int i = 0; i<feromon_m.size(); i++)
+        {
+            for(int j = 0; j < feromon_m.back().size(); j++)
+            {
+                feromon_m[i][j] = feromon_m[i][j]*g;
+                // std::cout << feromon_m[i][j] << " ";
+            }
+            // std::cout<<std::endl;
+        }
+        // по муравьям
         for(int k = 1; k <= cities.size(); k++) // цикл по муравьям
         {
+            double Lk = 0;
+            int ii, jj;
+            for(int i = 0; i < ant_ways_day.back().size()-1; i++)
+            {
+                ii = ant_ways_day[k-1][i];
+                jj = ant_ways_day[k-1][i+1];
+                Lk += matrix[ii-1][jj-1];
+            }
+            ii = 0;
+            jj = 0;
+            for(int i = 0; i < ant_ways_day.back().size()-1; i++)
+            {
+                ii = ant_ways_day[k-1][i];
+                jj = ant_ways_day[k-1][i+1];
+                feromon_m[ii-1][jj-1] = feromon_m[ii-1][jj-1]+Q/Lk;
+                feromon_m[jj-1][ii-1] = feromon_m[jj-1][ii-1]+Q/Lk;
+            }
 
         }
+        // Пост проверка матрицы феромона
+        for(int i = 0; i<feromon_m.size(); i++)
+        {
+            for(int j = 0; j < feromon_m.back().size(); j++)
+            {
+                if(feromon_m[i][j] < 0.1) // qmin = 0.1
+                {
+                    feromon_m[i][j] = 0.1;
+                }
+            }
+        }
+        //печать матрицы феромона
+        for(int i = 0; i<feromon_m.size(); i++)
+        {
+            for(int j = 0; j < feromon_m.back().size(); j++)
+            {
+                std::cout << feromon_m[i][j] << " ";
+            }
+            std::cout<<std::endl;
+        }
+    //--- end расчет феромона
 
 
         // if(counter++ == 0) exit(1);
