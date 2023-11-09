@@ -79,6 +79,9 @@ run_5.1.1.komi:
 	g++ -std=c++17 ./5.1.1.komi.cpp -o ./build/5.1.1.komi -g && ./build/5.1.1.komi
 run_5.1.2.komi:
 	g++ -std=c++17 ./5.1.2.komi.cpp -o ./build/5.1.2.komi -g && ./build/5.1.2.komi
+run_5.1.3.komi:
+	g++ -std=c++17 ./5.1.3.komi.cpp -o ./build/5.1.3.komi -g && ./build/5.1.3.komi
+
 run_5.2.1.komi:
 	g++ -std=c++17 ./5.2.1.komi.cpp -o ./build/5.2.1.komi -g && ./build/5.2.1.komi
 run_5.2.2.komi:
