@@ -4,6 +4,7 @@
     сохранение путей и вычисление минимального - работает
     матрица феромона - работает
     построение таблицы не полной  - готово
+    таблица полная - работает
 */
 #include <iostream>
 #include <string>
@@ -86,10 +87,19 @@ int main()
     std::vector <double> a = {0.1, 0.25, 0.5, 0.75, 0.9};
     std::vector <double> g = {0.1, 0.25, 0.5, 0.75, 0.9};
     // a - alpha
-    double Lbest {0};
-    std::vector <int> way {};
+    double Lbest_one {0};
+    double Lbest_two {0};
+    double Lbest_three {0};
+    std::vector <int> way_one {};
+    std::vector <int> way_two {};
+    std::vector <int> way_three {};
+    int diff_one {0};
+    int diff_two {0};
+    int diff_three {0};
+    int maxf {0};
+    int maxp {0};
 
-    std::cout << "a" <<"\t"<< "q" << "\t" << "tmax" << "\t" << "Lbest" << "\t"<<"Lbest - Lэ" << "\t" << "ways" << std::endl;
+    std::cout << "a" <<"\t"<< "q" << "\t" << "tmax" << "\t" << "Lb_1" << "\t" << "Lb_2"<<"\t" << "Lb_3"<< "\t"<<"Lb1-Lэ1" << "\t" << "Lb2-Lэ2" << "\t" << "Lb3-Lэ3"<< "\t" << "maxp" << "\t\t" << "ways_L1" << "\t\t" << "ways_L2" << "\t\t" << "ways_L3"<< std::endl;
 
     for(int i = 0; i < tmax.size(); i++)
     {
@@ -97,60 +107,35 @@ int main()
         {
             for(int n = 0; n < g.size(); n++)
             {
-                Lbest = compute_func(a[j], g[n], tmax[i], matrix_1, way);
+                Lbest_one = compute_func(a[j], g[n], tmax[i], matrix_1, way_one);
+                Lbest_two = compute_func(a[j], g[n], tmax[i], matrix_2, way_two);
+                Lbest_three = compute_func(a[j], g[n], tmax[i], matrix_3, way_three);
 
-                std::cout << a[j] <<"\t"<< g[n] << "\t" << tmax[i] << "\t" << Lbest << "\t" << Lbest-14 << "\t\t";
-                for(int t = 0; t< way.size(); t++)
-                    std::cout << way[t] << " ";
+                diff_one = Lbest_one-14;
+                diff_two = Lbest_two-14;
+                diff_three = Lbest_three-16;
+
+                maxf = std::max(diff_one, diff_two);
+                maxp = std::max(maxf, diff_three);
+
+                std::cout << a[j] <<"\t"<< g[n] << "\t" << tmax[i] << "\t" << Lbest_one << "\t" << Lbest_two << "\t" << Lbest_three << "\t" << diff_one << "\t" << diff_two << "\t" << diff_three << "\t" << maxp <<"\t\t";
+                
+                for(int t = 0; t< way_one.size(); t++)
+                    std::cout << way_one[t] << "";
+                std::cout << "\t";
+                for(int t = 0; t< way_two.size(); t++)
+                    std::cout << way_two[t] << "";
+                std::cout << "\t";
+                for(int t = 0; t< way_three.size(); t++)
+                    std::cout << way_three[t] << "";
+                std::cout << "\t";
+
                 std::cout << std::endl;
             }
         }
     }
 
     std::cout << std::endl;
-    std::cout << "a" <<"\t"<< "q" << "\t" << "tmax" << "\t" << "Lbest" << "\t"<<"Lbest - Lэ"<< "\t" << "ways" << std::endl;
-
-    for(int i = 0; i < tmax.size(); i++)
-    {
-        for(int j = 0; j < a.size(); j++)
-        {
-            for(int n = 0; n < g.size(); n++)
-            {
-                Lbest = compute_func(a[j], g[n], tmax[i], matrix_2, way);
-
-                std::cout << a[j] <<"\t"<< g[n] << "\t" << tmax[i] << "\t" << Lbest << "\t" << Lbest-14 << "\t\t";
-                for(int t = 0; t< way.size(); t++)
-                    std::cout << way[t] << " ";
-                std::cout << std::endl;
-            }
-        }
-    }
-    
-    std::cout << std::endl;
-    std::cout << "a" <<"\t"<< "q" << "\t" << "tmax" << "\t" << "Lbest" << "\t"<<"Lbest - Lэ"<< "\t" << "ways" << std::endl;
-
-    for(int i = 0; i < tmax.size(); i++)
-    {
-        for(int j = 0; j < a.size(); j++)
-        {
-            for(int n = 0; n < g.size(); n++)
-            {
-                Lbest = compute_func(a[j], g[n], tmax[i], matrix_3, way);
-
-                std::cout << a[j] <<"\t"<< g[n] << "\t" << tmax[i] << "\t" << Lbest << "\t" << Lbest-16 << "\t\t";
-                for(int t = 0; t< way.size(); t++)
-                    std::cout << way[t] << " ";
-                std::cout << std::endl;
-            }
-        }
-    }
-
-
-
-
-
-
-
 
 
     return 0;
@@ -278,6 +263,7 @@ double compute_func(double a,
                     std::vector <int>& way)
 {
     srand(time(NULL));
+    way.clear();
 
     std::vector <int> cities {};
     for(int i = 0; i < matrix.size(); i++)
