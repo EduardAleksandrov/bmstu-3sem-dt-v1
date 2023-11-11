@@ -423,12 +423,12 @@ void get_full_table(std::vector <Table_column>& table)
         int jj {-1};
         int32_t min_weight;
         int32_t max_weight {0};
-        for(int i = 0; i < table.size(); i++)
+        for(int i = 0; i < table.size(); i++) // расчет первого минимального
         {
             max_weight += table[i].node_weight;
         }
         min_weight = max_weight;
-        for(int i = 0; i < table.size()-1; i++)
+        for(int i = 0; i < table.size()-1; i++) // нашли первую минимальную сумму
         {
             for(int j = i+1; j < table.size(); j++)
             {
@@ -440,7 +440,7 @@ void get_full_table(std::vector <Table_column>& table)
                 }
             }
         }
-        if(ii != -1 && jj != -1)
+        if(ii != -1 && jj != -1) // новая запись в массив структур
         {
             table[ii].union_flag = 0;
             table[jj].union_flag = 0;
