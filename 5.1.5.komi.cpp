@@ -55,13 +55,13 @@ int main()
     // Lbest = compute_func(a, g, tmax, matrix, way);
 
 // --- Ввод матриц из файла
-    std::string file[] {"5.2.1.matrix_2.txt", "5.2.1.matrix_3.txt", "5.2.1.matrix_4.txt"};
+    std::string file[] {"5.2.1.matrix_20.txt", "5.2.1.matrix_30.txt", "5.2.1.matrix_40.txt"};
     int file_number_one = 0;
     int file_number_two = 1;
     int file_number_three = 2;
-    std::vector <std::vector<int>> matrix_1 {}; // Lэ = 14
-    std::vector <std::vector<int>> matrix_2 {}; // Lэ = 14
-    std::vector <std::vector<int>> matrix_3 {}; // Lэ = 16
+    std::vector <std::vector<int>> matrix_1 {}; // Lэ = 14   157
+    std::vector <std::vector<int>> matrix_2 {}; // Lэ = 14   170
+    std::vector <std::vector<int>> matrix_3 {}; // Lэ = 16   189
     get_data(file[file_number_one], matrix_1);
     if(matrix_1.size() != matrix_1.back().size())
     {
@@ -98,27 +98,38 @@ int main()
     int diff_three {0};
     int maxf {0};
     int maxp {0};
+    int max_maxp {0};
+    int ind {0};
+    int max_ind {0};
 
-    std::cout << "a" <<"\t"<< "q" << "\t" << "tmax" << "\t" << "Lb_1" << "\t" << "Lb_2"<<"\t" << "Lb_3"<< "\t"<<"Lb1-Lэ1" << "\t" << "Lb2-Lэ2" << "\t" << "Lb3-Lэ3"<< "\t" << "maxp" << "\t\t" << "ways_L1" << "\t\t" << "ways_L2" << "\t\t" << "ways_L3"<< std::endl;
+    std::cout << "id" << "\t" << "a" << "\t" << "q" << "\t" << "tmax" << "\t" << "Lb_1" << "\t" << "Lb_2"<<"\t" << "Lb_3"<< "\t"<<"Lb1-Lэ1" << "\t" << "Lb2-Lэ2" << "\t" << "Lb3-Lэ3"<< "\t" << "maxp" << "\t\t" << "ways_L1" << "\t\t" << "ways_L2" << "\t\t" << "ways_L3"<< std::endl;
 
-    for(int i = 0; i < tmax.size(); i++)
+    for(int i = 0; i < a.size(); i++)
     {
-        for(int j = 0; j < a.size(); j++)
+        for(int j = 0; j < g.size(); j++)
         {
-            for(int n = 0; n < g.size(); n++)
+            for(int n = 0; n < tmax.size(); n++)
             {
-                Lbest_one = compute_func(a[j], g[n], tmax[i], matrix_1, way_one);
-                Lbest_two = compute_func(a[j], g[n], tmax[i], matrix_2, way_two);
-                Lbest_three = compute_func(a[j], g[n], tmax[i], matrix_3, way_three);
+                Lbest_one = compute_func(a[i], g[j], tmax[n], matrix_1, way_one);
+                Lbest_two = compute_func(a[i], g[j], tmax[n], matrix_2, way_two);
+                Lbest_three = compute_func(a[i], g[j], tmax[n], matrix_3, way_three);
 
-                diff_one = Lbest_one-14;
-                diff_two = Lbest_two-14;
-                diff_three = Lbest_three-16;
+                diff_one = Lbest_one-157;
+                diff_two = Lbest_two-170;
+                diff_three = Lbest_three-189;
 
                 maxf = std::max(diff_one, diff_two);
                 maxp = std::max(maxf, diff_three);
 
-                std::cout << a[j] <<"\t"<< g[n] << "\t" << tmax[i] << "\t" << Lbest_one << "\t" << Lbest_two << "\t" << Lbest_three << "\t" << diff_one << "\t" << diff_two << "\t" << diff_three << "\t" << maxp <<"\t\t";
+                ind++;
+
+                if(maxp>max_maxp)
+                {
+                    max_maxp = maxp;
+                    max_ind = ind;
+                } 
+
+                std::cout << ind << "\t" << a[i] <<"\t"<< g[j] << "\t" << tmax[n] << "\t" << Lbest_one << "\t" << Lbest_two << "\t" << Lbest_three << "\t" << diff_one << "\t" << diff_two << "\t" << diff_three << "\t" << maxp <<"\t\t";
                 
                 for(int t = 0; t< way_one.size(); t++)
                     std::cout << way_one[t] << "";
@@ -132,8 +143,11 @@ int main()
 
                 std::cout << std::endl;
             }
+        std::cout << std::endl;
         }
+    std::cout << std::endl;
     }
+    std::cout << "Максимальный maxp: " << max_maxp << ", с индексом: " << max_ind << std::endl;
 
     std::cout << std::endl;
 
