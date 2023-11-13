@@ -367,6 +367,8 @@ double compute_func(double a,
                         two = pow(feromon_m[cities_k_ant[cities_k_ant.size()-1]-1][j-1],b);
                         // std::cout << 2 <<"\n";
                     }
+
+                    // посещенные города
                     double sumq {0};
                     std::vector <bool> visited_city{};
                     for(int j = 0; j<cities.size(); j++)
