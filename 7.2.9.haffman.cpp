@@ -73,7 +73,7 @@ int main()
                 break;
             }
         }
-        if(existence_flag == 0 && ch != L'\0' && ch != '\n' && ch != EOF)
+        if(existence_flag == 0 && ch != L'\0' && ch != EOF)  //&& ch != '\n'
         {
             table.push_back(Table_column());
             table[index_number].index = index_number+1;
@@ -451,6 +451,7 @@ void get_full_table(std::vector <Table_column>& table)
             table[table.size()-1].left_index = ii+1;
             table[table.size()-1].right_index = jj+1;
             table[table.size()-1].union_flag= 1;
+            table[table.size()-1].node_label = ' ';
         }
     }
 }
