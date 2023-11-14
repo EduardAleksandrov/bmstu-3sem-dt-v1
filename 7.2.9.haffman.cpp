@@ -336,7 +336,7 @@ int main()
     //получение второго сегмента
     char upper_read_seg_two;
     wff.read((char *) &upper_read_seg_two, 1);
-    int segment_two_tt = (int)segment_two;
+    int segment_two_tt = (int)upper_read_seg_two;
     std::wcout <<L"Количество бит в последнем байте:";
     std::wcout << segment_two_tt << std::endl;
     //---
