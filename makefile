@@ -135,3 +135,6 @@ run_7.2.8.haffman:
 	g++ -std=c++17 ./7.2.8.haffman.cpp -o ./build/7.2.8.haffman -g && ./build/7.2.8.haffman
 run_7.2.9.haffman:
 	g++ -std=c++17 ./7.2.9.haffman.cpp -o ./build/7.2.9.haffman -g && ./build/7.2.9.haffman
+
+run_8.1.1.bin_poisk:
+	g++ -std=c++17 ./8.1.1.bin_poisk.cpp -o ./build/8.1.1.bin_poisk -g && ./build/8.1.1.bin_poisk
