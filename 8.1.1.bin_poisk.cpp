@@ -16,17 +16,18 @@ void test(int, int, vector <int>&);
 int main()
 {
     
-    vector <int> mass {-3,1,2,3,4,8,12,14};
+    vector <int> mass_one {-3,1,2,3,4,8,12,14};
+    vector <int> mass_two {-3};
 
-    int search_elem {1};
+    int search_elem {-3};
 
     // int result {-1};
-    // result = search(mass, search_elem);
+    // result = search(mass_two, search_elem);
     // if(result == -1) cout << "Элемент не найден" << endl;
     // else cout << "Индекс равен: " << result << endl;
     
 
-    test(-5, 18, mass);
+    test(-5, 18, mass_one);
 
     return 0;
 }
@@ -47,14 +48,14 @@ void test(int fv, int lv, vector <int>& mass)
 
 int search(vector <int>& mass, int search_elem)
 {
+    if(mass.size() == 0) return -1;
     int index {0};
     int L {0};
     int size = mass.size()-1;
     int R {size};
     
     int mid_ind{0};
-    // cout << mid_ind;
-    int num = 0;
+    // int num = 0;
     while(true)
     {
         mid_ind = round((R-L+1)/2.0) - 1;
