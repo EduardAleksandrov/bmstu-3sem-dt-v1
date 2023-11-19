@@ -33,12 +33,13 @@ int main()
     vector <int> mass_three {-3};
     vector <int> mass_four {-3,4};
     vector <int> mass_five {0,1,3,5,7,9,11};
-    vector <int> mass_six {2,4,6,8,10,12,14,16,18,20,22,24,26,28};
+    vector <int> mass_six {0,1,3,5,7,9,11,12};
+    vector <int> mass_seven {2,4,6,8,10,12,14,16,18,20,22,24,26,28};
 
 
-    int ids_size = 6;
-    vector <int> *ids[] = {&mass_one, &mass_two, &mass_three, &mass_four, &mass_five, &mass_six};
-    for(int i = 0; i < ids_size; i++)
+    // int ids_size = 7;
+    vector <int>* ids[] = {&mass_one, &mass_two, &mass_three, &mass_four, &mass_five, &mass_six, &mass_seven};
+    for(int i = 0; i < std::size(ids); i++)
     {
         int res {-1};
         res = test_two(-5, 30, *ids[i]);
