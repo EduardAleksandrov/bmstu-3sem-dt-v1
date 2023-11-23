@@ -140,3 +140,6 @@ run_8.1.1.bin_poisk:
 	g++ -std=c++17 ./8.1.1.bin_poisk.cpp -o ./build/8.1.1.bin_poisk -g && ./build/8.1.1.bin_poisk
 run_8.1.2.bin_poisk:
 	g++ -std=c++17 ./8.1.2.bin_poisk.cpp -o ./build/8.1.2.bin_poisk -g && ./build/8.1.2.bin_poisk
+
+run_10.1.1.b_tree:
+	g++ -std=c++17 ./10.1.1.b_tree.cpp -o ./build/10.1.1.b_tree -g && ./build/10.1.1.b_tree
