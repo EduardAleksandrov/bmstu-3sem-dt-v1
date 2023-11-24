@@ -145,3 +145,5 @@ run_10.1.1.b_tree:
 	g++ -std=c++17 ./10.1.1.b_tree.cpp -o ./build/10.1.1.b_tree -g && ./build/10.1.1.b_tree
 run_10.1.2.b_tree:
 	g++ -std=c++17 ./10.1.2.b_tree.cpp -o ./build/10.1.2.b_tree -g && ./build/10.1.2.b_tree
+run_10.1.3.b_tree:
+	g++ -std=c++17 ./10.1.3.b_tree.cpp -o ./build/10.1.3.b_tree -g && ./build/10.1.3.b_tree
