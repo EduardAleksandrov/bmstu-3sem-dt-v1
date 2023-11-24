@@ -22,7 +22,7 @@ public:
         this->root = NULL;
     }
 
-    int calheight(struct node *p)
+    int calheight(struct node *p) // пересчет снизу вверх
     {
         if(p->left && p->right)
         {
@@ -120,6 +120,10 @@ public:
         
         return tp2; 
     }
+    // void update(struct node *r)
+    // {
+
+    // }
 
     struct node* insert(struct node *r,int data)
     {
@@ -134,14 +138,13 @@ public:
             return r;             
         } else {
             if(data < r->data)
-            r->left = insert(r->left,data);
+                r->left = insert(r->left,data);
             else
-            r->right = insert(r->right,data);
+                r->right = insert(r->right,data);
         }
 
         r->height = calheight(r);
-        cout << r->data << "\n";
-        cout << r->height << "\n";
+        cout << r->data << " " << r->height << "\n";
 
         if(bf(r)==2 && bf(r->left)==1)
         {
@@ -155,7 +158,7 @@ public:
         } else if(bf(r)==2 && bf(r->left)==-1)
         {
             r = lrrotation(r);
-        }        
+        }
 
         return r;
     }
@@ -257,7 +260,7 @@ int main(){
                 break;
             
             case 5:
-                vector <int> t {350,200,400,100,300}; //350,200,400,100,300 вводим 160 LL поворот
+                vector <int> t {350,200,400,100,300}; //350,200,400,100,300 вводим 160 LL поворот + 100
                 for(int i = 0; i < t.size(); i++)
                     b.root = b.insert(b.root, t[i]);
                 break;
