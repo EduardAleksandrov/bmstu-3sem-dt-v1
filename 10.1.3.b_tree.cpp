@@ -26,7 +26,7 @@ public:
         this->root = NULL;
     }
 
-    int calheight(struct node *p) // пересчет снизу вверх
+    int calheight(struct node *p) // пересчет снизу-вверх
     {
         if(p->left && p->right)
         {
@@ -235,13 +235,17 @@ int main(){
     int c, x, xx;
     struct node* s;
 
+    vector <int> t {350,200,400,100,300}; //350,200,400,100,300 вводим 160 LL поворот + 100
+
+
     while(true)
     {
         cout << "\n1.Показать граф";
-        cout << "\n2.Вставить";
-        cout << "\n3.Найти";
-        cout << "\n4.Очистить";
-        cout << "\n5.Вставить граф программно\n";
+        cout << "\n2.Вставить элемент";
+        cout << "\n3.Найти элемент";
+        cout << "\n4.Очистить граф";
+        cout << "\n5.Вставить граф программно";
+        cout << "\n6.Выход\n";
         cout << "\nВыбор: ";
 
         cin >> c;
@@ -257,6 +261,12 @@ int main(){
             case 2:
                 cout<<"\nВведите данные(ключ): ";
                 cin>>x;
+                s = b.search(b.root, x);
+                if(s != NULL)
+                {
+                    cout << "Такая вершина уже есть" << "\n";
+                    continue;
+                }
                 b.root = b.insert(b.root,x);
                 // cout << b.root->data << "\n";
                 // cout << b.root->height << "\n";
@@ -272,10 +282,11 @@ int main(){
                 b.root = NULL;
                 break;
             case 5:
-                vector <int> t {350,200,400,100,300}; //350,200,400,100,300 вводим 160 LL поворот + 100
                 for(int i = 0; i < t.size(); i++)
                     b.root = b.insert(b.root, t[i]);
                 break;
+            case 6:
+                exit(EXIT_SUCCESS);
         }
     }
     return 0;
