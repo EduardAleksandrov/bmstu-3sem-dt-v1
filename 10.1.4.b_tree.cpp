@@ -27,7 +27,7 @@ public:
         this->root = NULL;
     }
 
-    int calh_rec(struct node *p)
+    int calh_rec(struct node *p) //рекурсивный расчет высоты
     {
         if(p == NULL) return 0;
         int l{0}, r{0};
@@ -132,7 +132,7 @@ public:
             r = n;
             r->left = r->right = NULL;
             // r->height = 1; 
-            return r;             
+            return r;
         } else {
             if(data < r->data)
                 r->left = insert(r->left,data);
@@ -165,7 +165,7 @@ public:
     {
         if (this->root == NULL)
         {
-            cout<<"\n"<<"Empty tree"<<"\n";
+            cout<<"\n"<<"Дерево пусто"<<"\n";
             return;            
         }
         levelorder_newline(this->root);

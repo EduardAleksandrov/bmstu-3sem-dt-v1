@@ -178,7 +178,7 @@ public:
     {
         if (this->root == NULL)
         {
-            cout<<"\n"<<"Empty tree"<<"\n";
+            cout<<"\n"<<"Дерево пусто"<<"\n";
             return;            
         }
         levelorder_newline(this->root);
