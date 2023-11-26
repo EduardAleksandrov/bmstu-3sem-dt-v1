@@ -1,7 +1,7 @@
 /*
     Task: Реализация сбалансированного бинарного дерева АБЛ
     добавлен пересчет высот всех узлов авто при добавлении - работает
-    динамический расчет h эксперимент
+    динамический расчет height эксперимент - работает
 */
 #include <iostream>
 #include <queue>
@@ -11,7 +11,7 @@ using namespace std;
 struct node 
 {
     int data;
-    int height;
+    // int height;
     struct node *left;
     struct node *right;
 };
@@ -27,44 +27,35 @@ public:
         this->root = NULL;
     }
 
-    int calheight(struct node *p) // пересчет снизу-вверх
+    int calh_rec(struct node *p)
     {
-        if(p->left && p->right)
-        {
-            if (p->left->height < p->right->height)
-                return p->right->height + 1;
-            else return  p->left->height + 1;
-        }
-        else if(p->left && p->right == NULL)
-        {
-            return p->left->height + 1;
-        }
-        else if(p->left ==NULL && p->right)
-        {
-            return p->right->height + 1;
-        } else if(p->left == NULL && p->right == NULL)
-        {
-            return 1;
-        }
-        return 0;
-
+        if(p == NULL) return 0;
+        int l{0}, r{0};
+        if(p->left == NULL && p->right == NULL) return 1;
+        if(p->left != NULL) l = calh_rec(p->left);
+        if(p->right != NULL) r = calh_rec(p->right);
+        return ((l>r)?l:r) + 1;
     }
-
-    
 
     int bf(struct node *n)  // balance factor
     {
+        int l {0};
+        int r {0};
         if(n->left && n->right)
         {
-            return n->left->height - n->right->height; 
+            l = calh_rec(n->left);
+            r = calh_rec(n->right);
+            return l - r; 
         }
         else if(n->left && n->right == NULL)
         {
-            return n->left->height; 
+            l = calh_rec(n->left);
+            return l; 
         }
         else if(n->left== NULL && n->right )
         {
-            return -n->right->height;
+            r = calh_rec(n->right);
+            return -r;
         }
         return 0;
     }
@@ -130,23 +121,6 @@ public:
         
         return tp2; 
     }
-    void update_h(struct node *r)
-    {
-        if(r->left != NULL) update_h(r->left);
-        if(r->right != NULL) update_h(r->right);
-        r->height = calheight(r);
-        return;
-    }
-
-    int calh_rec(struct node *p)
-    {
-        if(p == NULL) return 0;
-        int l{0}, r{0};
-        if(p->left == NULL && p->right == NULL) return 1;
-        if(p->left != NULL) l = calh_rec(p->left);
-        if(p->right != NULL) r = calh_rec(p->right);
-        return ((l>r)?l:r) + 1;
-    }
 
     struct node* insert(struct node *r,int data)
     {
@@ -157,7 +131,7 @@ public:
             n->data = data;
             r = n;
             r->left = r->right = NULL;
-            r->height = 1; 
+            // r->height = 1; 
             return r;             
         } else {
             if(data < r->data)
@@ -166,8 +140,8 @@ public:
                 r->right = insert(r->right,data);
         }
         
-        r->height = calheight(r);
-        cout << r->data << " " << r->height << "\n";
+        // r->height = calheight(r);
+        // cout << r->data << " " << "\n";
 
         if(bf(r)==2 && bf(r->left)==1)
         {
@@ -183,7 +157,7 @@ public:
             r = lrrotation(r);
         }
 
-        if(root == r && r != NULL) update_h(r);
+        // if(root == r && r != NULL) update_h(r);
         return r;
     }
 
@@ -230,11 +204,16 @@ public:
             }
         }
     }
-    struct node* search(struct node* node, int data) 
+    struct node* search(struct node* node, int data, int& h) 
     {
-        if (node == NULL || node->data == data) return node;
-        if (data < node->data) return search(node->left, data);
-        else return search(node->right, data);
+        h = 0;
+        if(node == NULL || node->data == data) 
+        {
+            h = calh_rec(node);
+            return node;
+        }
+        if(data < node->data) return search(node->left, data, h);
+        else return search(node->right, data, h);
     }
     ~ABL(){
 
@@ -246,6 +225,7 @@ int main(){
 
     ABL b;
     int c, x, xx;
+    int h, hh;
     struct node* s;
 
     vector <int> t {350,200,400,100,300}; //350,200,400,100,300 вводим 160 LL поворот + 100
@@ -265,31 +245,26 @@ int main(){
 
         switch (c)
         {
-            case 0: 
-                b.update_h(b.root);
-                break;
             case 1: 
                 b.levelorder_newline();
-                cout << b.calh_rec(b.root) << "\n";
+                // cout << b.calh_rec(b.root) << "\n";
                 break;
             case 2:
                 cout<<"\nВведите данные(ключ): ";
                 cin>>x;
-                s = b.search(b.root, x);
+                s = b.search(b.root, x , h);
                 if(s != NULL)
                 {
                     cout << "Такая вершина уже есть" << "\n";
                     continue;
                 }
                 b.root = b.insert(b.root,x);
-                // cout << b.root->data << "\n";
-                // cout << b.root->height << "\n";
                 break;
             case 3: 
                 cout << "\nКакой ищем: ";
                 cin >> xx;
-                s = b.search(b.root, xx);
-                if(s != NULL) cout << s->data << " " << s->height << "\n";
+                s = b.search(b.root, xx, hh);
+                if(s != NULL) cout << s->data << " " << hh << "\n";
                 else cout << "Таково нет" << "\n";
                 break;
             case 4:
