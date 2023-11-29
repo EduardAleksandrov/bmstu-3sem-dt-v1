@@ -1,6 +1,7 @@
+// пример
 #include <iostream>
 #include <queue>
-// #include <unordered_map>
+#include <unordered_map>
 using namespace std;
 
 struct node {
@@ -34,9 +35,20 @@ public:
             }
             else if(p->left ==NULL && p->right){
                return p->right->height + 1;
+            }else if(p->left == NULL && p->right == NULL)
+            {
+                return 1;
             }
             return 0;
 
+    }
+
+    void update_h(struct node *r)
+    {
+        if(r->left != NULL) update_h(r->left);
+        if(r->right != NULL) update_h(r->right);
+        r->height = calheight(r);
+        return;
     }
 
     int bf(struct node *n){
@@ -49,7 +61,7 @@ public:
             else if(n->left== NULL && n->right ){
                 return -n->right->height;
             }
-        return 0;
+            return 0;
     }
 
     struct node * llrotation(struct node *n){
@@ -142,7 +154,7 @@ public:
         else if(bf(r)==2 && bf(r->left)==-1){
             r = lrrotation(r);
         }        
-
+        if(root == r && r != NULL) update_h(r);
         return r;
 
         }
