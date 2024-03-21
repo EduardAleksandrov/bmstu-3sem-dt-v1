@@ -328,7 +328,7 @@ double compute_func(double a,
     // std::cout << Lbest << "\n";
 
     // цикл по суткам
-    std::vector <int> cities_k_ant{};
+    std::vector <int> cities_k_ant{}; //посещаемые города k муравьем (набираются в цикле while)
     double Lk {0};
     std::vector <double> ver_perehoda{}; //вероятность перехода
     std::vector <std::vector<int>> ant_ways_day {}; // матрица путей за k день
@@ -389,7 +389,7 @@ double compute_func(double a,
 
                     for(int q = 0; q<cities.size(); q++)
                     {
-                        if(visited_city[q] == 0) continue;
+                        if(visited_city[q] == 0) continue; //пропускаем посещенные города
                         else {
                             sumq+= pow(1.0/matrix[cities_k_ant[cities_k_ant.size()-1]-1][q],a) * pow(feromon_m[cities_k_ant[cities_k_ant.size()-1]-1][q],b);
                             // std::cout<< "sum" << sumq<<"\n";
@@ -468,13 +468,13 @@ double compute_func(double a,
             {
                 ii = ant_ways_day[j][i];
                 jj = ant_ways_day[j][i+1];
-                L += matrix[ii-1][jj-1];
+                L += matrix[ii-1][jj-1]; // суммирование длин путей
             }
             if(L<Lbest)
             {
                 Lbest = L;
                 way.clear();
-                for(int n = 0; n<ant_ways_day.back().size(); n++)
+                for(int n = 0; n<ant_ways_day.back().size(); n++) // запись для возврата, полученного минимального на текущий момент пути
                     way.push_back(ant_ways_day[j][n]);
             }
         // std::cout << L << "\n";
@@ -505,7 +505,7 @@ double compute_func(double a,
             int ii, jj;
             for(int i = 0; i < ant_ways_day.back().size()-1; i++)
             {
-                ii = ant_ways_day[k-1][i];
+                ii = ant_ways_day[k-1][i]; // путь для k муравья в этот день
                 jj = ant_ways_day[k-1][i+1];
                 Lk += matrix[ii-1][jj-1];
             }
